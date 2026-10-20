@@ -17,7 +17,7 @@ function render(){if(!project.sheets.length)init();deduplicateSavedAnalyses();le
  $('#sheet-list').innerHTML=project.sheets.map(x=>`<button class="sheet-item ${x.id===s.id?'active':''}" data-sheet="${x.id}"><span class="sheet-glyph">▦</span>${esc(x.name)}</button>`).join('');
  $('#filter-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').value=Math.min(s.selectedColumn||0,s.columns.length-1);
  let vis=visibleRows(s);$('#visible-count').textContent=`${vis.length} di ${s.rows.length}`;
- $('#data-table').innerHTML='<thead><tr><th>#</th>'+s.columns.map((c,i)=>`<th title="${esc(c.kind)}" data-col="${i}">${esc(c.name)} <span class="column-kind">${c.kind==='Numeric'?'123':c.kind==='Ordinal'?'↕':'Aa'}</span></th>`).join('')+'</tr></thead><tbody>'+vis.map(({r,i})=>`<tr data-row="${i}"><td>${i+1}</td>${r.map((v,j)=>`<td><input aria-label="Riga ${i+1}, ${esc(s.columns[j].name)}" data-row="${i}" data-col="${j}" value="${esc(v)}"></td>`).join('')}</tr>`).join('')+'</tbody>';
+ $('#data-table').innerHTML='<thead><tr><th>#</th>'+s.columns.map((c,i)=>`<th title="${esc(c.kind)}" data-col="${i}">${esc(c.name)} <span class="column-kind">${c.kind==='Numeric'?'123':c.kind==='Ordinal'?'↕':'Aa'}</span>${s.filters.some(f=>f.column===i)?'<span class="column-filter-icon" title="Filtro attivo" aria-label="Filtro attivo"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 2h14L10 8v5l-4 2V8z"/></svg></span>':''}</th>`).join('')+'</tr></thead><tbody>'+vis.map(({r,i})=>`<tr data-row="${i}"><td>${i+1}</td>${r.map((v,j)=>`<td><input aria-label="Riga ${i+1}, ${esc(s.columns[j].name)}" data-row="${i}" data-col="${j}" value="${esc(v)}"></td>`).join('')}</tr>`).join('')+'</tbody>';
  $('#analysis-list').innerHTML=s.analyses.map((a,i)=>analysisHtml(a,i,s)).join('');$('#empty-analysis').classList.toggle('hidden',s.analyses.length>0);
  $('#clear-filters').disabled=s.filters.length===0;$('#clear-filters').style.opacity=s.filters.length===0?'.5':'1';
  $('#active-filters').innerHTML=s.filters.map((f,i)=>`<div class="active-filter"><span>${esc(s.columns[f.column]?.name)} ${esc(f.operator)} ${esc(f.value)}</span><button data-remove-filter="${i}" aria-label="Rimuovi filtro ${i+1}" title="Rimuovi questo filtro">×</button></div>`).join('');
@@ -158,6 +158,23 @@ function computeAdd(s,kind,col,group){
   render();
  }catch(e){alert(e.message)}
 }
+async function filterTableColumn(s,col){
+ let operator='=',value='';
+ while(true){
+  const pending=modal('Filtra colonna: '+esc(s.columns[col].name),`<p>Il filtro si combina in AND con gli altri filtri attivi.</p><label for="column-filter-op">Condizione</label><select id="column-filter-op">${$('#filter-op').innerHTML}</select><label for="column-filter-value">Valore</label><input id="column-filter-value">`,[['Annulla','cancel','quiet'],['Applica filtro','ok','primary']]);
+  const select=$('#column-filter-op'),input=$('#column-filter-value');
+  select.value=operator;input.value=value;
+  const sync=()=>{input.disabled=['vuoto','non vuoto'].includes(select.value)};
+  select.onchange=sync;sync();
+  if(await pending!=='ok')return;
+  operator=select.value;value=input.value;
+  if(['>','≥','<','≤'].includes(operator)&&number(value)===null){alert('Inserisci una soglia numerica valida.');continue}
+  if(!['vuoto','non vuoto'].includes(operator)&&!value){alert('Inserisci il valore del filtro.');continue}
+  s.filters.push({column:col,operator,value:['vuoto','non vuoto'].includes(operator)?'':value});
+  touch(s);return;
+ }
+}
+
 let tableClipboard='';
 function insertTableColumn(s,index,name){
  s.columns.splice(index,0,{id:uid(),name,kind:'Nominal',automatic:true,levels:[]});
@@ -208,7 +225,7 @@ function closeTableMenu(){tableMenu.hidden=true;tableMenu.replaceChildren()}
 document.addEventListener('pointerdown',e=>{if(!tableMenu.contains(e.target))closeTableMenu()});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTableMenu()});
 window.addEventListener('resize',closeTableMenu);
-document.addEventListener('scroll',closeTableMenu,true);
+
 $('#data-table').addEventListener('contextmenu',e=>{
  const cell=e.target.closest('th,td');if(!cell)return;
  e.preventDefault();closeTableMenu();
@@ -223,6 +240,10 @@ $('#data-table').addEventListener('contextmenu',e=>{
   const button=document.createElement('button');button.textContent=label;button.setAttribute('role','menuitem');
   button.onclick=async()=>{closeTableMenu();try{await action()}catch(err){alert(err.message)}};tableMenu.append(button);
  };
+ if(mode==='column'){
+  add('Filtra questa colonna',()=>filterTableColumn(s,col));
+  if(s.filters.some(f=>f.column===col))add('Rimuovi filtri da questa colonna',()=>{s.filters=s.filters.filter(f=>f.column!==col);touch(s)});
+ }
  const copyRows=()=>mode==='column'?s.rows.map(row=>[row[col]]):mode==='row'?[s.rows[r]]:[[s.rows[r][col]]];
  add(mode==='column'?'Copia colonna':mode==='row'?'Copia riga':'Copia cella',()=>copyTableData(copyRows()));
  add('Incolla qui',()=>pasteTableData(s,Math.max(0,r),Math.max(0,col)));
