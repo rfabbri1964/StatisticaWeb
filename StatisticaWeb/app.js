@@ -17,9 +17,11 @@ function render(){if(!project.sheets.length)init();deduplicateSavedAnalyses();le
  $('#sheet-list').innerHTML=project.sheets.map(x=>`<button class="sheet-item ${x.id===s.id?'active':''}" data-sheet="${x.id}"><span class="sheet-glyph">▦</span>${esc(x.name)}</button>`).join('');
  $('#filter-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').value=Math.min(s.selectedColumn||0,s.columns.length-1);
  let vis=visibleRows(s);$('#visible-count').textContent=`${vis.length} di ${s.rows.length}`;
- $('#data-table').innerHTML='<thead><tr><th>#</th>'+s.columns.map((c,i)=>`<th title="${esc(c.kind)}" data-col="${i}">${esc(c.name)} <span class="column-kind">${c.kind==='Numeric'?'123':c.kind==='Ordinal'?'↕':'Aa'}</span></th>`).join('')+'</tr></thead><tbody>'+vis.map(({r,i})=>`<tr><td>${i+1}</td>${r.map((v,j)=>`<td><input aria-label="Riga ${i+1}, ${esc(s.columns[j].name)}" data-row="${i}" data-col="${j}" value="${esc(v)}"></td>`).join('')}</tr>`).join('')+'</tbody>';
+ $('#data-table').innerHTML='<thead><tr><th>#</th>'+s.columns.map((c,i)=>`<th title="${esc(c.kind)}" data-col="${i}">${esc(c.name)} <span class="column-kind">${c.kind==='Numeric'?'123':c.kind==='Ordinal'?'↕':'Aa'}</span></th>`).join('')+'</tr></thead><tbody>'+vis.map(({r,i})=>`<tr data-row="${i}"><td>${i+1}</td>${r.map((v,j)=>`<td><input aria-label="Riga ${i+1}, ${esc(s.columns[j].name)}" data-row="${i}" data-col="${j}" value="${esc(v)}"></td>`).join('')}</tr>`).join('')+'</tbody>';
  $('#analysis-list').innerHTML=s.analyses.map((a,i)=>analysisHtml(a,i,s)).join('');$('#empty-analysis').classList.toggle('hidden',s.analyses.length>0);
  $('#clear-filters').disabled=s.filters.length===0;$('#clear-filters').style.opacity=s.filters.length===0?'.5':'1';
+ $('#active-filters').innerHTML=s.filters.map((f,i)=>`<div class="active-filter"><span>${esc(s.columns[f.column]?.name)} ${esc(f.operator)} ${esc(f.value)}</span><button data-remove-filter="${i}" aria-label="Rimuovi filtro ${i+1}" title="Rimuovi questo filtro">×</button></div>`).join('');
+ $('#active-filters').hidden=!s.filters.length;
  setupColumnResize();
 }
 function setupColumnResize(){
@@ -156,6 +158,104 @@ function computeAdd(s,kind,col,group){
   render();
  }catch(e){alert(e.message)}
 }
+let tableClipboard='';
+function insertTableColumn(s,index,name){
+ s.columns.splice(index,0,{id:uid(),name,kind:'Nominal',automatic:true,levels:[]});
+ s.rows.forEach(row=>row.splice(index,0,''));
+ s.filters=s.filters.map(f=>({...f,column:f.column>=index?f.column+1:f.column}));
+ if((s.selectedColumn||0)>=index)s.selectedColumn=(s.selectedColumn||0)+1;
+}
+async function newTableColumn(s,index){
+ if(await modal('Inserisci colonna','<label for="context-column-name">Nome colonna</label><input id="context-column-name" placeholder="Nuova colonna">')!=='ok')return;
+ const name=$('#context-column-name').value.trim();
+ if(!name||s.columns.some(c=>c.name.toLowerCase()===name.toLowerCase())){alert('Scegli un nome non vuoto e univoco.');return}
+ insertTableColumn(s,index,name);touch(s);
+}
+function clipboardText(rows){return rows.map(row=>row.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join('\t')).join('\n')}
+async function copyTableData(rows){
+ tableClipboard=clipboardText(rows);
+ try{await navigator.clipboard.writeText(tableClipboard)}catch{
+  const pending=modal('Copia dati','<p>Copia il testo selezionato con Ctrl+C.</p><textarea id="clipboard-copy"></textarea>',[['Chiudi','ok','primary']]);
+  $('#clipboard-copy').value=tableClipboard;$('#clipboard-copy').select();await pending;
+ }
+}
+async function pasteTableData(s,row,col){
+ let text;
+ try{text=await navigator.clipboard.readText()}catch{}
+ if(text===undefined){
+  const pending=modal('Incolla dati','<p>Incolla qui con Ctrl+V i dati copiati da Excel o dalla tabella. I valori sostituiscono le celle a partire dalla posizione scelta.</p><textarea id="clipboard-paste"></textarea>');
+  $('#clipboard-paste').value=tableClipboard;
+  if(await pending!=='ok')return;
+  text=$('#clipboard-paste').value;
+ }
+ if(!text)return;
+ const rows=csvParse(text.replace(/\r?\n$/,''),'\t');
+ if(!rows.length)return;
+ const count=Math.max(...rows.map(r=>r.length));
+ if(rows.length>10000||col+count>1000){alert('Troppi dati: massimo 10000 righe e 1000 colonne.');return}
+ while(s.columns.length<col+count){
+  let n=s.columns.length+1,name='C'+n;
+  while(s.columns.some(c=>c.name===name))name='C'+(++n);
+  insertTableColumn(s,s.columns.length,name);
+ }
+ while(s.rows.length<row+rows.length)s.rows.push(s.columns.map(()=>''));
+ rows.forEach((values,i)=>values.forEach((value,j)=>s.rows[row+i][col+j]=value));
+ classify(s);touch(s);
+}
+const tableMenu=document.createElement('div');
+tableMenu.id='table-context-menu';tableMenu.className='table-context-menu';tableMenu.hidden=true;tableMenu.setAttribute('role','menu');document.body.append(tableMenu);
+function closeTableMenu(){tableMenu.hidden=true;tableMenu.replaceChildren()}
+document.addEventListener('pointerdown',e=>{if(!tableMenu.contains(e.target))closeTableMenu()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTableMenu()});
+window.addEventListener('resize',closeTableMenu);
+document.addEventListener('scroll',closeTableMenu,true);
+$('#data-table').addEventListener('contextmenu',e=>{
+ const cell=e.target.closest('th,td');if(!cell)return;
+ e.preventDefault();closeTableMenu();
+ const s=sheet(),input=cell.querySelector('input[data-row]');
+ const col=cell.matches('th[data-col]')?+cell.dataset.col:input?+input.dataset.col:-1;
+ const row=cell.closest('tr').dataset.row;
+ const r=row===undefined?-1:+row;
+ if(col<0&&r<0)return;
+ const mode=r<0?'column':col<0?'row':'cell';
+ const title=document.createElement('strong');title.textContent=mode==='column'?'Colonna: '+s.columns[col].name:mode==='row'?'Riga '+(r+1):'Cella: '+s.columns[col].name+' · riga '+(r+1);tableMenu.append(title);
+ const add=(label,action)=>{
+  const button=document.createElement('button');button.textContent=label;button.setAttribute('role','menuitem');
+  button.onclick=async()=>{closeTableMenu();try{await action()}catch(err){alert(err.message)}};tableMenu.append(button);
+ };
+ const copyRows=()=>mode==='column'?s.rows.map(row=>[row[col]]):mode==='row'?[s.rows[r]]:[[s.rows[r][col]]];
+ add(mode==='column'?'Copia colonna':mode==='row'?'Copia riga':'Copia cella',()=>copyTableData(copyRows()));
+ add('Incolla qui',()=>pasteTableData(s,Math.max(0,r),Math.max(0,col)));
+ add('Svuota contenuto',()=>{
+  if(mode==='column')s.rows.forEach(row=>row[col]='');
+  else if(mode==='row')s.rows[r]=s.columns.map(()=>'');
+  else s.rows[r][col]='';
+  classify(s);touch(s);
+ });
+ if(col>=0){
+  add('Inserisci colonna a sinistra',()=>newTableColumn(s,col));
+  add('Inserisci colonna a destra',()=>newTableColumn(s,col+1));
+  add('Proprietà colonna',()=>editColumn(col));
+  add('Elimina colonna',()=>deleteColumn(s,col));
+ }
+ if(r>=0){
+  const insert=index=>{s.rows.splice(index,0,s.columns.map(()=>''));touch(s)};
+  add('Inserisci riga sopra',()=>insert(r));add('Inserisci riga sotto',()=>insert(r+1));
+  add('Elimina riga',async()=>{
+   if(await modal('Elimina riga',`<p>Eliminare la riga ${r+1} e i suoi dati?</p>`,[['Annulla','cancel','quiet'],['Elimina','ok','primary']])!=='ok')return;
+   s.rows.splice(r,1);classify(s);touch(s);
+  });
+ }
+ tableMenu.hidden=false;
+ tableMenu.style.left=Math.max(0,Math.min(e.clientX,window.innerWidth-tableMenu.offsetWidth-8))+'px';
+ tableMenu.style.top=Math.max(0,Math.min(e.clientY,window.innerHeight-tableMenu.offsetHeight-8))+'px';
+ tableMenu.querySelector('button')?.focus();
+});
+$('#active-filters').addEventListener('click',e=>{
+ const button=e.target.closest('[data-remove-filter]');if(!button)return;
+ sheet().filters.splice(+button.dataset.removeFilter,1);touch();
+});
+
 function getVal(node,name){return node.querySelector(`[data-${name}]`)}
 $('#modal').addEventListener('keydown',e=>{
  if(e.key==='Enter'&&!e.isComposing&&e.target.matches('input:not([type="button"]):not([type="submit"])')){
