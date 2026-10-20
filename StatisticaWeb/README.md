@@ -12,6 +12,10 @@ Versione browser del software desktop StatisticaWindows 0.3. La schermata usa so
 - Esportazione dei dati in CSV. Ctrl+S esporta il progetto; Ctrl+O lo apre.
 
 
+## Dimensioni della tabella
+
+La tabella dati si ridimensiona trascinando l’angolo inferiore destro. I comandi nella barra del titolo permettono di ridurla alla sola intestazione (**—**) oppure ingrandirla nello spazio della schermata (**□**). Il comando di ripristino riporta alle dimensioni precedenti; anche un doppio clic sulla barra del titolo alterna dimensioni normali ed espanse. Nella vista espansa rimangono disponibili filtri, menu del tasto destro, aggiunta di righe/colonne e modifica delle celle. Ridurre la tabella non cancella dati o analisi.
+
 ## Grafici dei dati complessivi
 
 Ogni riquadro di statistica descrittiva contiene tre checkbox indipendenti sotto i risultati generali. Si possono attivare uno o più grafici anche nelle analisi raggruppate: i grafici usano tutti i valori validi dello snapshot generale, rispettando i filtri applicati al calcolo, senza suddividerli per categoria.

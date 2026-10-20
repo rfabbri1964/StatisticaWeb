@@ -13,7 +13,7 @@ let sheet=()=>project.sheets.find(s=>s.id===project.activeSheetId)||project.shee
 function classify(s){s.columns.forEach((c,i)=>{if(c.automatic){let x=infer(c.name,s.rows,i);c.kind=x.kind;c.levels=x.levels}})}
 function visibleRows(s=sheet()){return s.rows.map((r,i)=>({r,i})).filter(({r})=>s.filters.every(f=>{let x=r[f.column]??'',v=f.value??'',a=number(x),b=number(v);switch(f.operator){case'vuoto':return missing(x);case'non vuoto':return!missing(x);case'contiene':return x.toLowerCase().includes(v.toLowerCase());case'=':return x.toLowerCase()===v.toLowerCase();case'≠':return x.toLowerCase()!==v.toLowerCase();case'>':return a!==null&&b!==null&&a>b;case'≥':return a!==null&&b!==null&&a>=b;case'<':return a!==null&&b!==null&&a<b;case'≤':return a!==null&&b!==null&&a<=b;default:return true}}))}
 function fmt(x){if(x===null||x===undefined||Number.isNaN(x))return'Non definito';return new Intl.NumberFormat('it-IT',{maximumSignificantDigits:12}).format(x)}
-function render(){if(!project.sheets.length)init();deduplicateSavedAnalyses();let s=sheet();classify(s);$('#project-name').textContent=project.name||'Progetto senza nome';$('#sheet-heading').textContent=s.name;$('#dirty').textContent=dirty?'Modifiche non esportate':'Salvato nel browser';$('#dirty').className=dirty?'saved unsaved':'saved';$('#data-summary').textContent=`${s.rows.length.toLocaleString('it-IT')} righe · ${s.columns.length} colonne · ${s.filters.length} filtri`;
+function render(){if(!project.sheets.length)init();deduplicateSavedAnalyses();let s=sheet();classify(s);$('#project-name').textContent=project.name||'Progetto senza nome';$('#sheet-heading').textContent=s.name;$('#table-sheet-name').textContent='· '+s.name;$('#dirty').textContent=dirty?'Modifiche non esportate':'Salvato nel browser';$('#dirty').className=dirty?'saved unsaved':'saved';$('#data-summary').textContent=`${s.rows.length.toLocaleString('it-IT')} righe · ${s.columns.length} colonne · ${s.filters.length} filtri`;
  $('#sheet-list').innerHTML=project.sheets.map(x=>`<button class="sheet-item ${x.id===s.id?'active':''}" data-sheet="${x.id}"><span class="sheet-glyph">▦</span>${esc(x.name)}</button>`).join('');
  $('#filter-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').value=Math.min(s.selectedColumn||0,s.columns.length-1);
  let vis=visibleRows(s);$('#visible-count').textContent=`${vis.length} di ${s.rows.length}`;
@@ -287,6 +287,34 @@ $('#modal').addEventListener('keydown',e=>{
   if(confirm)confirm.click();
  }
 });
+function setTableWindowMode(mode){
+ const card=$('.data-card'),previous=card.dataset.windowMode||'normal';
+ if(mode==='minimized'&&previous!=='minimized')card.dataset.restoreMode=previous;
+ card.dataset.windowMode=mode;
+ document.body.classList.toggle('table-maximized',mode==='maximized');
+ $('#table-window-backdrop').hidden=mode!=='maximized';
+ const minimize=$('#table-minimize'),maximize=$('#table-maximize');
+ minimize.textContent=mode==='minimized'?'▣':'—';
+ minimize.title=mode==='minimized'?'Ripristina tabella':'Riduci tabella';
+ minimize.setAttribute('aria-label',minimize.title);
+ minimize.setAttribute('aria-expanded',String(mode!=='minimized'));
+ maximize.textContent=mode==='maximized'?'❐':'□';
+ maximize.title=mode==='maximized'?'Ripristina dimensioni':'Ingrandisci tabella';
+ maximize.setAttribute('aria-label',maximize.title);
+ maximize.setAttribute('aria-pressed',String(mode==='maximized'));
+}
+$('#table-minimize').onclick=()=>{
+ const card=$('.data-card');
+ setTableWindowMode(card.dataset.windowMode==='minimized'?(card.dataset.restoreMode||'normal'):'minimized');
+};
+$('#table-maximize').onclick=()=>setTableWindowMode($('.data-card').dataset.windowMode==='maximized'?'normal':'maximized');
+$('.card-toolbar').addEventListener('dblclick',e=>{
+ if(e.target.closest('button,input,select'))return;
+ setTableWindowMode($('.data-card').dataset.windowMode==='maximized'?'normal':'maximized');
+});
+$('#table-add-column').onclick=()=>$('#add-column').click();
+$('#table-add-rows').onclick=()=>$('#add-rows').click();
+
 $('#sheet-list').addEventListener('click',e=>{let b=e.target.closest('[data-sheet]');if(b){project.activeSheetId=b.dataset.sheet;render()}});
 $('#add-sheet').onclick=async()=>{let ans=await modal('Nuovo foglio','<label>Nome del foglio</label><input id="new-name" value="Foglio '+(project.sheets.length+1)+'">');if(ans!=='ok')return;let name=$('#new-name').value.trim();if(!name||project.sheets.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('Scegli un nome univoco.');let s=newSheet(name,['C1','C2','C3'],Array.from({length:20},()=>['','','']));s.columns=s.columns.map(c=>({...c,kind:'Nominal'}));project.sheets.push(s);project.activeSheetId=s.id;touch(s)};
 $('#rename-sheet').onclick=async()=>{let s=sheet(),ans=await modal('Rinomina foglio',`<label>Nome</label><input id="new-name" value="${esc(s.name)}">`);if(ans!=='ok')return;let name=$('#new-name').value.trim();if(!name||project.sheets.some(x=>x!==s&&x.name.toLowerCase()===name.toLowerCase()))return alert('Scegli un nome univoco.');s.name=name;touch(s)};
