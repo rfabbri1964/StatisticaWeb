@@ -95,6 +95,13 @@ function computeAdd(s,kind,col,group){
  }catch(e){alert(e.message)}
 }
 function getVal(node,name){return node.querySelector(`[data-${name}]`)}
+$('#modal').addEventListener('keydown',e=>{
+ if(e.key==='Enter'&&!e.isComposing&&e.target.matches('input:not([type="button"]):not([type="submit"])')){
+  e.preventDefault();
+  const confirm=$('#modal button[value="ok"]');
+  if(confirm)confirm.click();
+ }
+});
 $('#sheet-list').addEventListener('click',e=>{let b=e.target.closest('[data-sheet]');if(b){project.activeSheetId=b.dataset.sheet;render()}});
 $('#add-sheet').onclick=async()=>{let ans=await modal('Nuovo foglio','<label>Nome del foglio</label><input id="new-name" value="Foglio '+(project.sheets.length+1)+'">');if(ans!=='ok')return;let name=$('#new-name').value.trim();if(!name||project.sheets.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('Scegli un nome univoco.');let s=newSheet(name,['C1','C2','C3'],Array.from({length:20},()=>['','','']));s.columns=s.columns.map(c=>({...c,kind:'Nominal'}));project.sheets.push(s);project.activeSheetId=s.id;touch(s)};
 $('#rename-sheet').onclick=async()=>{let s=sheet(),ans=await modal('Rinomina foglio',`<label>Nome</label><input id="new-name" value="${esc(s.name)}">`);if(ans!=='ok')return;let name=$('#new-name').value.trim();if(!name||project.sheets.some(x=>x!==s&&x.name.toLowerCase()===name.toLowerCase()))return alert('Scegli un nome univoco.');s.name=name;touch(s)};
