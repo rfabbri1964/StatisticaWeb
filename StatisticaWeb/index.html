@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f5f7fa">
   <title>Statistica — analisi dati</title>
-  <link rel="stylesheet" href="style.css?v=20261021-column-filter">
+  <link rel="stylesheet" href="style.css?v=20261021-statistical-plots">
 </head>
 <body>
   <header class="topbar">
@@ -41,6 +41,8 @@
   <input id="csv-file" type="file" accept=".csv,text/csv,.txt" hidden>
   <input id="project-file" type="file" accept=".statproj,.json,.xml,application/json,text/xml" hidden>
   <dialog id="modal"><form method="dialog"><button class="modal-close" value="cancel" aria-label="Chiudi">×</button><div id="modal-content"></div></form></dialog>
-  <script src="app.js?v=20261021-column-filter"></script>
+  <script src="vendor/jstat.min.js?v=1.9.6"></script>
+  <script src="analysis-plots.js?v=20261021-statistical-plots"></script>
+  <script src="app.js?v=20261021-statistical-plots"></script>
 </body>
 </html>

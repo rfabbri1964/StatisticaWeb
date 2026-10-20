@@ -11,6 +11,25 @@ Versione browser del software desktop StatisticaWindows 0.3. La schermata usa so
 - Apertura dei progetti legacy `.statproj` creati dall'app Windows 0.2 e 0.3, oltre ai progetti JSON web.
 - Esportazione dei dati in CSV. Ctrl+S esporta il progetto; Ctrl+O lo apre.
 
+
+## Grafici dei dati complessivi
+
+Ogni riquadro di statistica descrittiva contiene tre checkbox indipendenti sotto i risultati generali. Si possono attivare uno o più grafici anche nelle analisi raggruppate: i grafici usano tutti i valori validi dello snapshot generale, rispettando i filtri applicati al calcolo, senza suddividerli per categoria.
+
+- **Istogramma**: classi automatiche con regola di Freedman–Diaconis; ripiego su Sturges se l’intervallo interquartile è nullo. Massimo 40 classi.
+- **Normality plot**: grafico Q-Q normale con retta di media e deviazione standard campionaria stimate, banda **puntuale al 95%** e dati fuori banda in rosso. Per N ≤ 2000 la banda viene simulata con 1200 campioni normali, ristimando media e deviazione standard in ciascuno; il seme è deterministico. Per campioni maggiori usa l’approssimazione asintotica per i quantili con parametri stimati. Non è una banda simultanea: un punto fuori banda non equivale da solo al rigetto della normalità. Il test Anderson–Darling usa tutti i valori validi, con correzione finita di Stephens e p-value approssimato come `statsmodels.stats.diagnostic.normal_ad`. Il test non è definito con meno di 3 valori o con varianza nulla; sotto 8 valori viene segnalata la cautela necessaria. Nei campioni grandi vengono diradati soltanto i punti interni alla banda, mantenendo tutti quelli esterni.
+- **Intervalli di confidenza**: IC bilaterali individuali della media (t di Student), mediana (binomiale esatto e statistiche d’ordine, conservativo) e deviazione standard campionaria (chi-quadro). Il livello iniziale è 95%, modificabile con campo numerico o cursore tra 50% e 99,9%, con aggiornamento immediato. Ogni parametro ha una scala distinta e limiti numerici espliciti. Gli intervalli per media e deviazione standard assumono osservazioni indipendenti da una popolazione normale; quello della mediana non richiede normalità. Se il campione non permette un IC esatto finito per la mediana, viene mostrato l’intervallo non limitato con la spiegazione.
+
+Le scelte dei grafici e il livello IC sono salvati nel progetto/browser e mantenuti quando si ricalcola il risultato. Attivare un grafico non modifica i dati, non rende il risultato da aggiornare e non crea analisi duplicate.
+
+I calcoli e i grafici funzionano offline. Le distribuzioni statistiche usano la copia locale di **jStat 1.9.6**, licenza MIT in `vendor/jstat-LICENSE`, scaricata dal registro npm e verificata con l’integrità SHA-512 pubblicata. Fonte del p-value AD: [statsmodels v0.14.6](https://github.com/statsmodels/statsmodels/blob/v0.14.6/statsmodels/stats/_adnorm.py).
+
+### Verifica dei calcoli
+
+Dalla radice del repository: `node --test tests/statistical-plots.test.js`. I riferimenti numerici in `tests/fixtures/statistical-reference.json` provengono da SciPy (AD, quantili t/chi-quadro, binomiale) e dalle formule di Stephens verificate contro statsmodels. Non occorre installare pacchetti per eseguire questi test Node.
+
+Per verificare anche l’interfaccia, avviare `python3 -m http.server 8000 --bind 127.0.0.1` nella radice, poi `python3 tests/browser-statistical-plots.py` in un secondo terminale con Python Playwright e `/usr/bin/chromium` disponibili. Il controllo usa contesti browser isolati per non modificare i dati dell’utente.
+
 ## Passaggio alla versione web
 
 1. Apri questa cartella e avvia `index.html` nel browser.
