@@ -13,7 +13,7 @@ let sheet=()=>project.sheets.find(s=>s.id===project.activeSheetId)||project.shee
 function classify(s){s.columns.forEach((c,i)=>{if(c.automatic){let x=infer(c.name,s.rows,i);c.kind=x.kind;c.levels=x.levels}})}
 function visibleRows(s=sheet()){return s.rows.map((r,i)=>({r,i})).filter(({r})=>s.filters.every(f=>{let x=r[f.column]??'',v=f.value??'',a=number(x),b=number(v);switch(f.operator){case'vuoto':return missing(x);case'non vuoto':return!missing(x);case'contiene':return x.toLowerCase().includes(v.toLowerCase());case'=':return x.toLowerCase()===v.toLowerCase();case'≠':return x.toLowerCase()!==v.toLowerCase();case'>':return a!==null&&b!==null&&a>b;case'≥':return a!==null&&b!==null&&a>=b;case'<':return a!==null&&b!==null&&a<b;case'≤':return a!==null&&b!==null&&a<=b;default:return true}}))}
 function fmt(x){if(x===null||x===undefined||Number.isNaN(x))return'Non definito';return new Intl.NumberFormat('it-IT',{maximumSignificantDigits:12}).format(x)}
-function render(){if(!project.sheets.length)init();let s=sheet();classify(s);$('#project-name').textContent=project.name||'Progetto senza nome';$('#sheet-heading').textContent=s.name;$('#dirty').textContent=dirty?'Modifiche non esportate':'Salvato nel browser';$('#dirty').className=dirty?'saved unsaved':'saved';$('#data-summary').textContent=`${s.rows.length.toLocaleString('it-IT')} righe · ${s.columns.length} colonne · ${s.filters.length} filtri`;
+function render(){if(!project.sheets.length)init();deduplicateSavedAnalyses();let s=sheet();classify(s);$('#project-name').textContent=project.name||'Progetto senza nome';$('#sheet-heading').textContent=s.name;$('#dirty').textContent=dirty?'Modifiche non esportate':'Salvato nel browser';$('#dirty').className=dirty?'saved unsaved':'saved';$('#data-summary').textContent=`${s.rows.length.toLocaleString('it-IT')} righe · ${s.columns.length} colonne · ${s.filters.length} filtri`;
  $('#sheet-list').innerHTML=project.sheets.map(x=>`<button class="sheet-item ${x.id===s.id?'active':''}" data-sheet="${x.id}"><span class="sheet-glyph">▦</span>${esc(x.name)}</button>`).join('');
  $('#filter-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').value=Math.min(s.selectedColumn||0,s.columns.length-1);
  let vis=visibleRows(s);$('#visible-count').textContent=`${vis.length} di ${s.rows.length}`;
@@ -60,7 +60,20 @@ async function runAnalysis(kind){
 }
 function analysisResultKey(a){
  const {id,createdAt,revision,...result}=a;
- return JSON.stringify(result);
+ return JSON.stringify(result,function(key,value){return value&&typeof value==='object'&&!Array.isArray(value)?Object.fromEntries(Object.entries(value).sort(([a],[b])=>a.localeCompare(b))):value});
+}
+function deduplicateSavedAnalyses(){
+ let changed=false;
+ for(const s of project.sheets){
+  const seen=new Map(),selected=s.analyses[s.selectedAnalysis];
+  s.analyses=s.analyses.filter(a=>{
+   const key=analysisResultKey(a);
+   if(seen.has(key)){changed=true;return false}
+   seen.set(key,a);return true;
+  });
+  s.selectedAnalysis=selected?Math.max(0,s.analyses.indexOf(seen.get(analysisResultKey(selected)))):0;
+ }
+ if(changed)localStorage.setItem('statistica-web-autosave',JSON.stringify(project));
 }
 function computeAdd(s,kind,col,group){
  try{
