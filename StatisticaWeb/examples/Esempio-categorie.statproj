@@ -1,0 +1,1307 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProjectData xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/StatisticaWindows">
+  <ActiveSheetId>fd1bff671d694fab8281f1eeca68d1f8</ActiveSheetId>
+  <ApplicationVersion>0.3</ApplicationVersion>
+  <FormatVersion>2</FormatVersion>
+  <Joins />
+  <Sheets>
+    <SheetData>
+      <Analyses />
+      <Columns>
+        <ColumnData>
+          <Automatic>true</Automatic>
+          <Id>d0942d3995ff47bea1acda0fc7760914</Id>
+          <Kind>Nominal</Kind>
+          <Levels xmlns:d6p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+          <Name>Lotto</Name>
+        </ColumnData>
+        <ColumnData>
+          <Automatic>true</Automatic>
+          <Id>5251580f572a4df3b2ca385196b80e8b</Id>
+          <Kind>Nominal</Kind>
+          <Levels xmlns:d6p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+          <Name>Macchina</Name>
+        </ColumnData>
+        <ColumnData>
+          <Automatic>true</Automatic>
+          <Id>272c7253888d443c8e6fabc379038e3c</Id>
+          <Kind>Numeric</Kind>
+          <Levels xmlns:d6p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+          <Name>Misura</Name>
+        </ColumnData>
+      </Columns>
+      <Filters />
+      <Id>7a96d65214ec43eb840f5484d974345a</Id>
+      <Name>Foglio 1</Name>
+      <Revision>1</Revision>
+      <Rows xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+        <d4p1:ArrayOfstring>
+          <d4p1:string>A</d4p1:string>
+          <d4p1:string>M1</d4p1:string>
+          <d4p1:string>49,6</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>A</d4p1:string>
+          <d4p1:string>M1</d4p1:string>
+          <d4p1:string>47,6</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>A</d4p1:string>
+          <d4p1:string>M1</d4p1:string>
+          <d4p1:string>49,9</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>A</d4p1:string>
+          <d4p1:string>M1</d4p1:string>
+          <d4p1:string>51,3</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>A</d4p1:string>
+          <d4p1:string>M1</d4p1:string>
+          <d4p1:string>47,8</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>B</d4p1:string>
+          <d4p1:string>M2</d4p1:string>
+          <d4p1:string>51,2</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>B</d4p1:string>
+          <d4p1:string>M2</d4p1:string>
+          <d4p1:string>52,6</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>B</d4p1:string>
+          <d4p1:string>M2</d4p1:string>
+          <d4p1:string>52,4</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>B</d4p1:string>
+          <d4p1:string>M2</d4p1:string>
+          <d4p1:string>53,6</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>B</d4p1:string>
+          <d4p1:string>M2</d4p1:string>
+          <d4p1:string>52,1</d4p1:string>
+        </d4p1:ArrayOfstring>
+      </Rows>
+      <SelectedAnalysis>-1</SelectedAnalysis>
+      <SelectedColumn>2</SelectedColumn>
+    </SheetData>
+    <SheetData>
+      <Analyses>
+        <AnalysisData>
+          <ColumnId>5cc4eb9c9aa449f38107dfd3fe2d57cb</ColumnId>
+          <Filter>Tutte le righe</Filter>
+          <GroupColumnId>58f017c596384e52bc2ad645ba668baf</GroupColumnId>
+          <GroupColumnName>Categoria</GroupColumnName>
+          <Groups>
+            <GroupResult>
+              <Category>A</Category>
+              <CategoryMissing>false</CategoryMissing>
+              <Metrics xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N validi</d8p1:Key>
+                  <d8p1:Value>3</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N mancanti</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N totale</d8p1:Key>
+                  <d8p1:Value>3</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Media</d8p1:Key>
+                  <d8p1:Value>10</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Mediana</d8p1:Key>
+                  <d8p1:Value>10</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Deviazione standard campionaria</d8p1:Key>
+                  <d8p1:Value>4</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Varianza campionaria</d8p1:Key>
+                  <d8p1:Value>16</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Errore standard della media</d8p1:Key>
+                  <d8p1:Value>2.3094010767585034</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Minimo</d8p1:Key>
+                  <d8p1:Value>6</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Massimo</d8p1:Key>
+                  <d8p1:Value>14</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Ampiezza</d8p1:Key>
+                  <d8p1:Value>8</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Somma</d8p1:Key>
+                  <d8p1:Value>30</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+              </Metrics>
+              <Snapshot>
+                <Observation>
+                  <Row>1</Row>
+                  <Value>10</Value>
+                </Observation>
+                <Observation>
+                  <Row>2</Row>
+                  <Value>14</Value>
+                </Observation>
+                <Observation>
+                  <Row>6</Row>
+                  <Value>6</Value>
+                </Observation>
+              </Snapshot>
+            </GroupResult>
+            <GroupResult>
+              <Category>B</Category>
+              <CategoryMissing>false</CategoryMissing>
+              <Metrics xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N validi</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N mancanti</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N totale</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Media</d8p1:Key>
+                  <d8p1:Value>20</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Mediana</d8p1:Key>
+                  <d8p1:Value>20</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Deviazione standard campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Varianza campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Errore standard della media</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Minimo</d8p1:Key>
+                  <d8p1:Value>20</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Massimo</d8p1:Key>
+                  <d8p1:Value>20</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Ampiezza</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Somma</d8p1:Key>
+                  <d8p1:Value>20</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+              </Metrics>
+              <Snapshot>
+                <Observation>
+                  <Row>3</Row>
+                  <Value>20</Value>
+                </Observation>
+              </Snapshot>
+            </GroupResult>
+            <GroupResult>
+              <Category>C</Category>
+              <CategoryMissing>false</CategoryMissing>
+              <Metrics xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N validi</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N mancanti</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N totale</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Media</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Mediana</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Deviazione standard campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Varianza campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Errore standard della media</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Minimo</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Massimo</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Ampiezza</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Somma</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+              </Metrics>
+              <Snapshot />
+            </GroupResult>
+            <GroupResult>
+              <Category></Category>
+              <CategoryMissing>true</CategoryMissing>
+              <Metrics xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N validi</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N mancanti</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N totale</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Media</d8p1:Key>
+                  <d8p1:Value>8</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Mediana</d8p1:Key>
+                  <d8p1:Value>8</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Deviazione standard campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Varianza campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Errore standard della media</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Minimo</d8p1:Key>
+                  <d8p1:Value>8</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Massimo</d8p1:Key>
+                  <d8p1:Value>8</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Ampiezza</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Somma</d8p1:Key>
+                  <d8p1:Value>8</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+              </Metrics>
+              <Snapshot>
+                <Observation>
+                  <Row>5</Row>
+                  <Value>8</Value>
+                </Observation>
+              </Snapshot>
+            </GroupResult>
+          </Groups>
+          <Id>2c4b9071d3b44df0b5ddc7947d91d622</Id>
+          <Kind>Descrittiva</Kind>
+          <Metrics xmlns:d6p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N validi</d6p1:Key>
+              <d6p1:Value>5</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N mancanti</d6p1:Key>
+              <d6p1:Value>1</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N totale</d6p1:Key>
+              <d6p1:Value>6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Media</d6p1:Key>
+              <d6p1:Value>11.6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Mediana</d6p1:Key>
+              <d6p1:Value>10</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Deviazione standard campionaria</d6p1:Key>
+              <d6p1:Value>5.5497747702046425</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Varianza campionaria</d6p1:Key>
+              <d6p1:Value>30.799999999999997</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Errore standard della media</d6p1:Key>
+              <d6p1:Value>2.481934729198171</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Minimo</d6p1:Key>
+              <d6p1:Value>6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Massimo</d6p1:Key>
+              <d6p1:Value>20</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Ampiezza</d6p1:Key>
+              <d6p1:Value>14</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Somma</d6p1:Key>
+              <d6p1:Value>58</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+          </Metrics>
+          <Revision>5</Revision>
+          <Snapshot>
+            <Observation>
+              <Row>1</Row>
+              <Value>10</Value>
+            </Observation>
+            <Observation>
+              <Row>2</Row>
+              <Value>14</Value>
+            </Observation>
+            <Observation>
+              <Row>3</Row>
+              <Value>20</Value>
+            </Observation>
+            <Observation>
+              <Row>5</Row>
+              <Value>8</Value>
+            </Observation>
+            <Observation>
+              <Row>6</Row>
+              <Value>6</Value>
+            </Observation>
+          </Snapshot>
+          <Text>Descrittiva — Valore&#xD;
+20/10/2026 12:47:06&#xD;
+Revisione dati: 5&#xD;
+Filtro: Tutte le righe&#xD;
+Righe originali valide: 1, 2, 3, 5, 6&#xD;
+&#xD;
+TOTALE DELLA SELEZIONE&#xD;
+N validi                             5&#xD;
+N mancanti                           1&#xD;
+N totale                             6&#xD;
+Media                                11,6&#xD;
+Mediana                              10&#xD;
+Deviazione standard campionaria      5,5497747702&#xD;
+Varianza campionaria                 30,8&#xD;
+Errore standard della media          2,4819347292&#xD;
+Minimo                               6&#xD;
+Massimo                              20&#xD;
+Ampiezza                             14&#xD;
+Somma                                58&#xD;
+&#xD;
+RAGGRUPPAMENTO PER: Categoria (Categorico nominale)&#xD;
+Categorie distinte per testo, con distinzione maiuscole/minuscole; spazi esterni ignorati.&#xD;
+&#xD;
+Categoria: «A»&#xD;
+N validi                             3&#xD;
+N mancanti                           0&#xD;
+N totale                             3&#xD;
+Media                                10&#xD;
+Mediana                              10&#xD;
+Deviazione standard campionaria      4&#xD;
+Varianza campionaria                 16&#xD;
+Errore standard della media          2,30940107676&#xD;
+Minimo                               6&#xD;
+Massimo                              14&#xD;
+Ampiezza                             8&#xD;
+Somma                                30&#xD;
+&#xD;
+Categoria: «B»&#xD;
+N validi                             1&#xD;
+N mancanti                           0&#xD;
+N totale                             1&#xD;
+Media                                20&#xD;
+Mediana                              20&#xD;
+Deviazione standard campionaria      Non definito&#xD;
+Varianza campionaria                 Non definito&#xD;
+Errore standard della media          Non definito&#xD;
+Minimo                               20&#xD;
+Massimo                              20&#xD;
+Ampiezza                             0&#xD;
+Somma                                20&#xD;
+&#xD;
+Categoria: «C»&#xD;
+N validi                             0&#xD;
+N mancanti                           1&#xD;
+N totale                             1&#xD;
+Media                                Non definito&#xD;
+Mediana                              Non definito&#xD;
+Deviazione standard campionaria      Non definito&#xD;
+Varianza campionaria                 Non definito&#xD;
+Errore standard della media          Non definito&#xD;
+Minimo                               Non definito&#xD;
+Massimo                              Non definito&#xD;
+Ampiezza                             Non definito&#xD;
+Somma                                Non definito&#xD;
+&#xD;
+Categoria: (categoria mancante)&#xD;
+N validi                             1&#xD;
+N mancanti                           0&#xD;
+N totale                             1&#xD;
+Media                                8&#xD;
+Mediana                              8&#xD;
+Deviazione standard campionaria      Non definito&#xD;
+Varianza campionaria                 Non definito&#xD;
+Errore standard della media          Non definito&#xD;
+Minimo                               8&#xD;
+Massimo                              8&#xD;
+Ampiezza                             0&#xD;
+Somma                                8&#xD;
+&#xD;
+Compatibilità MINITAB da validare.&#xD;
+Mancanti: celle vuote o *.&#xD;
+Deviazione standard campionaria: n−1.&#xD;
+Separatore decimale: virgola o punto;&#xD;
+non usare separatori delle migliaia.&#xD;
+</Text>
+        </AnalysisData>
+        <AnalysisData>
+          <ColumnId>5cc4eb9c9aa449f38107dfd3fe2d57cb</ColumnId>
+          <Filter>Tutte le righe</Filter>
+          <GroupColumnId i:nil="true" />
+          <GroupColumnName i:nil="true" />
+          <Groups i:nil="true" />
+          <Id>4665e988b3214be499fa96156593f929</Id>
+          <Kind>Descrittiva</Kind>
+          <Metrics xmlns:d6p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N validi</d6p1:Key>
+              <d6p1:Value>5</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N mancanti</d6p1:Key>
+              <d6p1:Value>1</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N totale</d6p1:Key>
+              <d6p1:Value>6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Media</d6p1:Key>
+              <d6p1:Value>11.6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Mediana</d6p1:Key>
+              <d6p1:Value>10</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Deviazione standard campionaria</d6p1:Key>
+              <d6p1:Value>5.5497747702046425</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Varianza campionaria</d6p1:Key>
+              <d6p1:Value>30.799999999999997</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Errore standard della media</d6p1:Key>
+              <d6p1:Value>2.481934729198171</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Minimo</d6p1:Key>
+              <d6p1:Value>6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Massimo</d6p1:Key>
+              <d6p1:Value>20</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Ampiezza</d6p1:Key>
+              <d6p1:Value>14</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Somma</d6p1:Key>
+              <d6p1:Value>58</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+          </Metrics>
+          <Revision>5</Revision>
+          <Snapshot>
+            <Observation>
+              <Row>1</Row>
+              <Value>10</Value>
+            </Observation>
+            <Observation>
+              <Row>2</Row>
+              <Value>14</Value>
+            </Observation>
+            <Observation>
+              <Row>3</Row>
+              <Value>20</Value>
+            </Observation>
+            <Observation>
+              <Row>5</Row>
+              <Value>8</Value>
+            </Observation>
+            <Observation>
+              <Row>6</Row>
+              <Value>6</Value>
+            </Observation>
+          </Snapshot>
+          <Text>Descrittiva — Valore&#xD;
+20/10/2026 12:47:06&#xD;
+Revisione dati: 5&#xD;
+Filtro: Tutte le righe&#xD;
+Righe originali valide: 1, 2, 3, 5, 6&#xD;
+&#xD;
+N validi                             5&#xD;
+N mancanti                           1&#xD;
+N totale                             6&#xD;
+Media                                11,6&#xD;
+Mediana                              10&#xD;
+Deviazione standard campionaria      5,5497747702&#xD;
+Varianza campionaria                 30,8&#xD;
+Errore standard della media          2,4819347292&#xD;
+Minimo                               6&#xD;
+Massimo                              20&#xD;
+Ampiezza                             14&#xD;
+Somma                                58&#xD;
+&#xD;
+Compatibilità MINITAB da validare.&#xD;
+Mancanti: celle vuote o *.&#xD;
+Deviazione standard campionaria: n−1.&#xD;
+Separatore decimale: virgola o punto;&#xD;
+non usare separatori delle migliaia.&#xD;
+</Text>
+        </AnalysisData>
+        <AnalysisData>
+          <ColumnId>5cc4eb9c9aa449f38107dfd3fe2d57cb</ColumnId>
+          <Filter>Tutte le righe</Filter>
+          <GroupColumnId>98f852e936a54747a88957f8ab6eaeba</GroupColumnId>
+          <GroupColumnName>Ordine</GroupColumnName>
+          <Groups>
+            <GroupResult>
+              <Category>alto</Category>
+              <CategoryMissing>false</CategoryMissing>
+              <Metrics xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N validi</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N mancanti</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N totale</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Media</d8p1:Key>
+                  <d8p1:Value>20</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Mediana</d8p1:Key>
+                  <d8p1:Value>20</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Deviazione standard campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Varianza campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Errore standard della media</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Minimo</d8p1:Key>
+                  <d8p1:Value>20</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Massimo</d8p1:Key>
+                  <d8p1:Value>20</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Ampiezza</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Somma</d8p1:Key>
+                  <d8p1:Value>20</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+              </Metrics>
+              <Snapshot>
+                <Observation>
+                  <Row>3</Row>
+                  <Value>20</Value>
+                </Observation>
+              </Snapshot>
+            </GroupResult>
+            <GroupResult>
+              <Category>medio</Category>
+              <CategoryMissing>false</CategoryMissing>
+              <Metrics xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N validi</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N mancanti</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N totale</d8p1:Key>
+                  <d8p1:Value>2</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Media</d8p1:Key>
+                  <d8p1:Value>10</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Mediana</d8p1:Key>
+                  <d8p1:Value>10</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Deviazione standard campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Varianza campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Errore standard della media</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Minimo</d8p1:Key>
+                  <d8p1:Value>10</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Massimo</d8p1:Key>
+                  <d8p1:Value>10</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Ampiezza</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Somma</d8p1:Key>
+                  <d8p1:Value>10</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+              </Metrics>
+              <Snapshot>
+                <Observation>
+                  <Row>1</Row>
+                  <Value>10</Value>
+                </Observation>
+              </Snapshot>
+            </GroupResult>
+            <GroupResult>
+              <Category>basso</Category>
+              <CategoryMissing>false</CategoryMissing>
+              <Metrics xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N validi</d8p1:Key>
+                  <d8p1:Value>3</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N mancanti</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N totale</d8p1:Key>
+                  <d8p1:Value>3</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Media</d8p1:Key>
+                  <d8p1:Value>9.3333333333333321</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Mediana</d8p1:Key>
+                  <d8p1:Value>8</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Deviazione standard campionaria</d8p1:Key>
+                  <d8p1:Value>4.1633319989322661</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Varianza campionaria</d8p1:Key>
+                  <d8p1:Value>17.333333333333336</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Errore standard della media</d8p1:Key>
+                  <d8p1:Value>2.4037008503093267</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Minimo</d8p1:Key>
+                  <d8p1:Value>6</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Massimo</d8p1:Key>
+                  <d8p1:Value>14</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Ampiezza</d8p1:Key>
+                  <d8p1:Value>8</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Somma</d8p1:Key>
+                  <d8p1:Value>28</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+              </Metrics>
+              <Snapshot>
+                <Observation>
+                  <Row>2</Row>
+                  <Value>14</Value>
+                </Observation>
+                <Observation>
+                  <Row>5</Row>
+                  <Value>8</Value>
+                </Observation>
+                <Observation>
+                  <Row>6</Row>
+                  <Value>6</Value>
+                </Observation>
+              </Snapshot>
+            </GroupResult>
+          </Groups>
+          <Id>aed243a953784875a10ebe3932a85538</Id>
+          <Kind>Descrittiva</Kind>
+          <Metrics xmlns:d6p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N validi</d6p1:Key>
+              <d6p1:Value>5</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N mancanti</d6p1:Key>
+              <d6p1:Value>1</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N totale</d6p1:Key>
+              <d6p1:Value>6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Media</d6p1:Key>
+              <d6p1:Value>11.6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Mediana</d6p1:Key>
+              <d6p1:Value>10</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Deviazione standard campionaria</d6p1:Key>
+              <d6p1:Value>5.5497747702046425</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Varianza campionaria</d6p1:Key>
+              <d6p1:Value>30.799999999999997</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Errore standard della media</d6p1:Key>
+              <d6p1:Value>2.481934729198171</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Minimo</d6p1:Key>
+              <d6p1:Value>6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Massimo</d6p1:Key>
+              <d6p1:Value>20</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Ampiezza</d6p1:Key>
+              <d6p1:Value>14</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Somma</d6p1:Key>
+              <d6p1:Value>58</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+          </Metrics>
+          <Revision>5</Revision>
+          <Snapshot>
+            <Observation>
+              <Row>1</Row>
+              <Value>10</Value>
+            </Observation>
+            <Observation>
+              <Row>2</Row>
+              <Value>14</Value>
+            </Observation>
+            <Observation>
+              <Row>3</Row>
+              <Value>20</Value>
+            </Observation>
+            <Observation>
+              <Row>5</Row>
+              <Value>8</Value>
+            </Observation>
+            <Observation>
+              <Row>6</Row>
+              <Value>6</Value>
+            </Observation>
+          </Snapshot>
+          <Text>Descrittiva — Valore&#xD;
+20/10/2026 12:47:06&#xD;
+Revisione dati: 5&#xD;
+Filtro: Tutte le righe&#xD;
+Righe originali valide: 1, 2, 3, 5, 6&#xD;
+&#xD;
+TOTALE DELLA SELEZIONE&#xD;
+N validi                             5&#xD;
+N mancanti                           1&#xD;
+N totale                             6&#xD;
+Media                                11,6&#xD;
+Mediana                              10&#xD;
+Deviazione standard campionaria      5,5497747702&#xD;
+Varianza campionaria                 30,8&#xD;
+Errore standard della media          2,4819347292&#xD;
+Minimo                               6&#xD;
+Massimo                              20&#xD;
+Ampiezza                             14&#xD;
+Somma                                58&#xD;
+&#xD;
+RAGGRUPPAMENTO PER: Ordine (Categorico ordinale)&#xD;
+Categorie distinte per testo, con distinzione maiuscole/minuscole; spazi esterni ignorati.&#xD;
+&#xD;
+Categoria: «alto»&#xD;
+N validi                             1&#xD;
+N mancanti                           0&#xD;
+N totale                             1&#xD;
+Media                                20&#xD;
+Mediana                              20&#xD;
+Deviazione standard campionaria      Non definito&#xD;
+Varianza campionaria                 Non definito&#xD;
+Errore standard della media          Non definito&#xD;
+Minimo                               20&#xD;
+Massimo                              20&#xD;
+Ampiezza                             0&#xD;
+Somma                                20&#xD;
+&#xD;
+Categoria: «medio»&#xD;
+N validi                             1&#xD;
+N mancanti                           1&#xD;
+N totale                             2&#xD;
+Media                                10&#xD;
+Mediana                              10&#xD;
+Deviazione standard campionaria      Non definito&#xD;
+Varianza campionaria                 Non definito&#xD;
+Errore standard della media          Non definito&#xD;
+Minimo                               10&#xD;
+Massimo                              10&#xD;
+Ampiezza                             0&#xD;
+Somma                                10&#xD;
+&#xD;
+Categoria: «basso»&#xD;
+N validi                             3&#xD;
+N mancanti                           0&#xD;
+N totale                             3&#xD;
+Media                                9,33333333333&#xD;
+Mediana                              8&#xD;
+Deviazione standard campionaria      4,16333199893&#xD;
+Varianza campionaria                 17,3333333333&#xD;
+Errore standard della media          2,40370085031&#xD;
+Minimo                               6&#xD;
+Massimo                              14&#xD;
+Ampiezza                             8&#xD;
+Somma                                28&#xD;
+&#xD;
+Compatibilità MINITAB da validare.&#xD;
+Mancanti: celle vuote o *.&#xD;
+Deviazione standard campionaria: n−1.&#xD;
+Separatore decimale: virgola o punto;&#xD;
+non usare separatori delle migliaia.&#xD;
+</Text>
+        </AnalysisData>
+        <AnalysisData>
+          <ColumnId>5cc4eb9c9aa449f38107dfd3fe2d57cb</ColumnId>
+          <Filter>Tutte le righe</Filter>
+          <GroupColumnId>a925de4e74dd407e945d66707899ab1a</GroupColumnId>
+          <GroupColumnName>Codice</GroupColumnName>
+          <Groups>
+            <GroupResult>
+              <Category>1</Category>
+              <CategoryMissing>false</CategoryMissing>
+              <Metrics xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N validi</d8p1:Key>
+                  <d8p1:Value>4</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N mancanti</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N totale</d8p1:Key>
+                  <d8p1:Value>4</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Media</d8p1:Key>
+                  <d8p1:Value>11</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Mediana</d8p1:Key>
+                  <d8p1:Value>9</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Deviazione standard campionaria</d8p1:Key>
+                  <d8p1:Value>6.2182527020592095</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Varianza campionaria</d8p1:Key>
+                  <d8p1:Value>38.666666666666664</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Errore standard della media</d8p1:Key>
+                  <d8p1:Value>3.1091263510296048</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Minimo</d8p1:Key>
+                  <d8p1:Value>6</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Massimo</d8p1:Key>
+                  <d8p1:Value>20</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Ampiezza</d8p1:Key>
+                  <d8p1:Value>14</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Somma</d8p1:Key>
+                  <d8p1:Value>44</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+              </Metrics>
+              <Snapshot>
+                <Observation>
+                  <Row>1</Row>
+                  <Value>10</Value>
+                </Observation>
+                <Observation>
+                  <Row>3</Row>
+                  <Value>20</Value>
+                </Observation>
+                <Observation>
+                  <Row>5</Row>
+                  <Value>8</Value>
+                </Observation>
+                <Observation>
+                  <Row>6</Row>
+                  <Value>6</Value>
+                </Observation>
+              </Snapshot>
+            </GroupResult>
+            <GroupResult>
+              <Category>2</Category>
+              <CategoryMissing>false</CategoryMissing>
+              <Metrics xmlns:d8p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N validi</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N mancanti</d8p1:Key>
+                  <d8p1:Value>1</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>N totale</d8p1:Key>
+                  <d8p1:Value>2</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Media</d8p1:Key>
+                  <d8p1:Value>14</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Mediana</d8p1:Key>
+                  <d8p1:Value>14</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Deviazione standard campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Varianza campionaria</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Errore standard della media</d8p1:Key>
+                  <d8p1:Value>NaN</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Minimo</d8p1:Key>
+                  <d8p1:Value>14</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Massimo</d8p1:Key>
+                  <d8p1:Value>14</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Ampiezza</d8p1:Key>
+                  <d8p1:Value>0</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+                <d8p1:KeyValueOfstringdouble>
+                  <d8p1:Key>Somma</d8p1:Key>
+                  <d8p1:Value>14</d8p1:Value>
+                </d8p1:KeyValueOfstringdouble>
+              </Metrics>
+              <Snapshot>
+                <Observation>
+                  <Row>2</Row>
+                  <Value>14</Value>
+                </Observation>
+              </Snapshot>
+            </GroupResult>
+          </Groups>
+          <Id>c096276f474c4fff8e736d6b6c501573</Id>
+          <Kind>Descrittiva</Kind>
+          <Metrics xmlns:d6p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N validi</d6p1:Key>
+              <d6p1:Value>5</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N mancanti</d6p1:Key>
+              <d6p1:Value>1</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>N totale</d6p1:Key>
+              <d6p1:Value>6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Media</d6p1:Key>
+              <d6p1:Value>11.6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Mediana</d6p1:Key>
+              <d6p1:Value>10</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Deviazione standard campionaria</d6p1:Key>
+              <d6p1:Value>5.5497747702046425</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Varianza campionaria</d6p1:Key>
+              <d6p1:Value>30.799999999999997</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Errore standard della media</d6p1:Key>
+              <d6p1:Value>2.481934729198171</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Minimo</d6p1:Key>
+              <d6p1:Value>6</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Massimo</d6p1:Key>
+              <d6p1:Value>20</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Ampiezza</d6p1:Key>
+              <d6p1:Value>14</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+            <d6p1:KeyValueOfstringdouble>
+              <d6p1:Key>Somma</d6p1:Key>
+              <d6p1:Value>58</d6p1:Value>
+            </d6p1:KeyValueOfstringdouble>
+          </Metrics>
+          <Revision>5</Revision>
+          <Snapshot>
+            <Observation>
+              <Row>1</Row>
+              <Value>10</Value>
+            </Observation>
+            <Observation>
+              <Row>2</Row>
+              <Value>14</Value>
+            </Observation>
+            <Observation>
+              <Row>3</Row>
+              <Value>20</Value>
+            </Observation>
+            <Observation>
+              <Row>5</Row>
+              <Value>8</Value>
+            </Observation>
+            <Observation>
+              <Row>6</Row>
+              <Value>6</Value>
+            </Observation>
+          </Snapshot>
+          <Text>Descrittiva — Valore&#xD;
+20/10/2026 12:47:06&#xD;
+Revisione dati: 5&#xD;
+Filtro: Tutte le righe&#xD;
+Righe originali valide: 1, 2, 3, 5, 6&#xD;
+&#xD;
+TOTALE DELLA SELEZIONE&#xD;
+N validi                             5&#xD;
+N mancanti                           1&#xD;
+N totale                             6&#xD;
+Media                                11,6&#xD;
+Mediana                              10&#xD;
+Deviazione standard campionaria      5,5497747702&#xD;
+Varianza campionaria                 30,8&#xD;
+Errore standard della media          2,4819347292&#xD;
+Minimo                               6&#xD;
+Massimo                              20&#xD;
+Ampiezza                             14&#xD;
+Somma                                58&#xD;
+&#xD;
+RAGGRUPPAMENTO PER: Codice (Categorico nominale)&#xD;
+Categorie distinte per testo, con distinzione maiuscole/minuscole; spazi esterni ignorati.&#xD;
+&#xD;
+Categoria: «1»&#xD;
+N validi                             4&#xD;
+N mancanti                           0&#xD;
+N totale                             4&#xD;
+Media                                11&#xD;
+Mediana                              9&#xD;
+Deviazione standard campionaria      6,21825270206&#xD;
+Varianza campionaria                 38,6666666667&#xD;
+Errore standard della media          3,10912635103&#xD;
+Minimo                               6&#xD;
+Massimo                              20&#xD;
+Ampiezza                             14&#xD;
+Somma                                44&#xD;
+&#xD;
+Categoria: «2»&#xD;
+N validi                             1&#xD;
+N mancanti                           1&#xD;
+N totale                             2&#xD;
+Media                                14&#xD;
+Mediana                              14&#xD;
+Deviazione standard campionaria      Non definito&#xD;
+Varianza campionaria                 Non definito&#xD;
+Errore standard della media          Non definito&#xD;
+Minimo                               14&#xD;
+Massimo                              14&#xD;
+Ampiezza                             0&#xD;
+Somma                                14&#xD;
+&#xD;
+Compatibilità MINITAB da validare.&#xD;
+Mancanti: celle vuote o *.&#xD;
+Deviazione standard campionaria: n−1.&#xD;
+Separatore decimale: virgola o punto;&#xD;
+non usare separatori delle migliaia.&#xD;
+</Text>
+        </AnalysisData>
+      </Analyses>
+      <Columns>
+        <ColumnData>
+          <Automatic>true</Automatic>
+          <Id>5cc4eb9c9aa449f38107dfd3fe2d57cb</Id>
+          <Kind>Numeric</Kind>
+          <Levels xmlns:d6p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+          <Name>Valore</Name>
+        </ColumnData>
+        <ColumnData>
+          <Automatic>true</Automatic>
+          <Id>58f017c596384e52bc2ad645ba668baf</Id>
+          <Kind>Nominal</Kind>
+          <Levels xmlns:d6p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+          <Name>Categoria</Name>
+        </ColumnData>
+        <ColumnData>
+          <Automatic>false</Automatic>
+          <Id>98f852e936a54747a88957f8ab6eaeba</Id>
+          <Kind>Ordinal</Kind>
+          <Levels xmlns:d6p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            <d6p1:string>alto</d6p1:string>
+            <d6p1:string>medio</d6p1:string>
+            <d6p1:string>basso</d6p1:string>
+          </Levels>
+          <Name>Ordine</Name>
+        </ColumnData>
+        <ColumnData>
+          <Automatic>false</Automatic>
+          <Id>a925de4e74dd407e945d66707899ab1a</Id>
+          <Kind>Nominal</Kind>
+          <Levels xmlns:d6p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+          <Name>Codice</Name>
+        </ColumnData>
+      </Columns>
+      <Filters />
+      <Id>fd1bff671d694fab8281f1eeca68d1f8</Id>
+      <Name>Foglio 2</Name>
+      <Revision>5</Revision>
+      <Rows xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+        <d4p1:ArrayOfstring>
+          <d4p1:string>10</d4p1:string>
+          <d4p1:string>A</d4p1:string>
+          <d4p1:string>medio</d4p1:string>
+          <d4p1:string>1</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>14</d4p1:string>
+          <d4p1:string>A</d4p1:string>
+          <d4p1:string>basso</d4p1:string>
+          <d4p1:string>2</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>20</d4p1:string>
+          <d4p1:string>B</d4p1:string>
+          <d4p1:string>alto</d4p1:string>
+          <d4p1:string>1</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>*</d4p1:string>
+          <d4p1:string>C</d4p1:string>
+          <d4p1:string>medio</d4p1:string>
+          <d4p1:string>2</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>8</d4p1:string>
+          <d4p1:string></d4p1:string>
+          <d4p1:string>basso</d4p1:string>
+          <d4p1:string>1</d4p1:string>
+        </d4p1:ArrayOfstring>
+        <d4p1:ArrayOfstring>
+          <d4p1:string>6</d4p1:string>
+          <d4p1:string>A</d4p1:string>
+          <d4p1:string>basso</d4p1:string>
+          <d4p1:string>1</d4p1:string>
+        </d4p1:ArrayOfstring>
+      </Rows>
+      <SelectedAnalysis>2</SelectedAnalysis>
+      <SelectedColumn>0</SelectedColumn>
+    </SheetData>
+  </Sheets>
+</ProjectData>
