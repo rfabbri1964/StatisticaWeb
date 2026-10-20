@@ -64,15 +64,22 @@
   }
   return{confidence,n,intervals:[meanInterval,medianInterval,sdInterval]};
  }
- function histogram(summary){
+ function histogramDefaults(summary){
+  const values=summary.sorted.map(o=>o.value),n=values.length;
+  if(!n)return{count:0,method:'Nessun dato'};
+  const span=values[n-1]-values[0];
+  if(!span)return{count:1,method:'Dati costanti'};
+  const iqr=quantile(values,.75)-quantile(values,.25),width=2*iqr/Math.cbrt(n);
+  const raw=width>0?Math.ceil(span/width):Math.ceil(Math.log2(n)+1);
+  return{count:Math.max(1,Math.min(40,raw)),method:width>0?'Freedman–Diaconis':'Sturges',capped:raw>40};
+ }
+ function histogram(summary,requested=null){
+  if(requested!==null&&(!Number.isInteger(requested)||requested<1||requested>200))throw Error('Il numero di bin deve essere un intero tra 1 e 200.');
   const values=summary.sorted.map(o=>o.value),n=values.length;
   if(!n)return[];
-  const min=values[0],max=values[n-1],span=max-min;
-  let count=1,low=min,high=max;
-  if(span>0){
-   const iqr=quantile(values,.75)-quantile(values,.25),width=2*iqr/Math.cbrt(n);
-   count=Math.max(1,Math.min(40,width>0?Math.ceil(span/width):Math.ceil(Math.log2(n)+1)));
-  }else{const pad=Math.max(Math.abs(min)*.01,.5);low-=pad;high+=pad}
+  let low=values[0],high=values[n-1];
+  const count=requested??histogramDefaults(summary).count;
+  if(high===low){const pad=Math.max(Math.abs(low)*.01,.5);low-=pad;high+=pad}
   const width=(high-low)/count,bins=Array.from({length:count},(_,i)=>({low:low+i*width,high:low+(i+1)*width,count:0}));
   values.forEach(value=>bins[Math.min(count-1,Math.max(0,Math.floor((value-low)/width)))].count++);
   return bins;
@@ -129,10 +136,10 @@
   const ticks=Array.from({length:5},(_,i)=>{const raw=min+(max-min)*i/4,value=Math.abs(raw)<(max-min)*1e-12?0:raw,x=map(value);return`<line x1="${x}" x2="${x}" y1="238" y2="243" stroke="#91a0b0"/><text x="${x}" y="258" text-anchor="middle">${escapeText(compact(value))}</text>`}).join('');
   return{map,ticks,min,max};
  }
- function histogramHtml(summary){
-  const bins=histogram(summary);if(!bins.length)return'<p>Nessun dato valido.</p>';
+ function histogramHtml(summary,requested=null){
+  const bins=histogram(summary,requested);if(!bins.length)return'<p>Nessun dato valido.</p>';
   const x=chartAxis(bins[0].low,bins[bins.length-1].high),maxCount=Math.max(...bins.map(b=>b.count)),y=value=>238-value/maxCount*206;
-  return`<section class="stat-plot" data-chart="histogram"><h4>Istogramma</h4>${chartFrame('Istogramma dei dati generali')}<text x="68" y="16">Frequenza</text>${[0,.5,1].map(t=>`<line x1="68" x2="540" y1="${y(t*maxCount)}" y2="${y(t*maxCount)}" stroke="#edf0f3"/><text x="60" y="${y(t*maxCount)+4}" text-anchor="end">${escapeText(compact(t*maxCount))}</text>`).join('')}${bins.map(b=>`<rect class="histogram-bin" x="${x.map(b.low)+1}" y="${y(b.count)}" width="${Math.max(1,x.map(b.high)-x.map(b.low)-2)}" height="${238-y(b.count)}" fill="#4b8ee8"><title>${escapeText(numberText(b.low))} – ${escapeText(numberText(b.high))}: ${b.count}</title></rect>`).join('')}${x.ticks}<text x="304" y="282" text-anchor="middle">Valore</text></svg><p>${summary.n} valori validi · ${bins.length} classi · dati complessivi.</p></section>`;
+  return`<section class="stat-plot" data-chart="histogram"><h4>Istogramma</h4>${chartFrame('Istogramma dei dati generali')}<text x="68" y="16">Frequenza</text>${[0,.5,1].map(t=>`<line x1="68" x2="540" y1="${y(t*maxCount)}" y2="${y(t*maxCount)}" stroke="#edf0f3"/><text x="60" y="${y(t*maxCount)+4}" text-anchor="end">${escapeText(compact(t*maxCount))}</text>`).join('')}${bins.map(b=>`<rect class="histogram-bin" x="${x.map(b.low)+1}" y="${y(b.count)}" width="${Math.max(1,x.map(b.high)-x.map(b.low)-2)}" height="${238-y(b.count)}" fill="#4b8ee8"><title>${escapeText(numberText(b.low))} – ${escapeText(numberText(b.high))}: ${b.count}</title></rect>`).join('')}${x.ticks}<text x="304" y="282" text-anchor="middle">Valore</text></svg><p>${summary.n} valori validi · ${bins.length} bin · ${requested===null?histogramDefaults(summary).method:'Scelta manuale'} · dati complessivi.</p></section>`;
  }
  function normalityHtml(a,summary){
   const cache=getPrepared(a);if(!cache.normal)cache.normal=normality(summary);const result=cache.normal;
@@ -164,19 +171,19 @@
  function options(a){
   const saved=a.plotOptions||{};
   const confidence=Number(saved.confidence);
-  return{histogram:!!saved.histogram,normality:!!saved.normality,intervals:!!saved.intervals,confidence:confidence>=50&&confidence<=99.9?confidence:95};
+  return{histogramBins:Number.isInteger(saved.histogramBins)&&saved.histogramBins>=1&&saved.histogramBins<=200?saved.histogramBins:null,histogram:!!saved.histogram,normality:!!saved.normality,intervals:!!saved.intervals,confidence:confidence>=50&&confidence<=99.9?confidence:95};
  }
  function controlsHtml(a,index){
-  const selected=options(a);
-  return`<fieldset class="plot-options"><legend>Grafici · dati complessivi</legend>${[['histogram','Istogramma'],['normality','Normality plot · banda 95% e Anderson–Darling'],['intervals','Intervalli di confidenza: media, mediana, dev. standard']].map(([key,label])=>`<label><input type="checkbox" data-plot-option="${key}" data-analysis-index="${index}"${selected[key]?' checked':''}> ${label}</label>`).join('')}<div class="confidence-control"${selected.intervals?'':' hidden'}><label for="confidence-${index}">Livello di confidenza IC (%)</label><input id="confidence-${index}" type="number" min="50" max="99.9" step="0.1" value="${selected.confidence}" data-plot-option="confidence" data-analysis-index="${index}"><input type="range" min="50" max="99.9" step="0.1" value="${selected.confidence}" aria-label="Livello di confidenza IC" data-plot-option="confidence" data-analysis-index="${index}"></div></fieldset>`;
+  const selected=options(a),auto=histogramDefaults(getPrepared(a).summary);
+  return`<fieldset class="plot-options"><legend>Grafici · dati complessivi</legend>${[['histogram','Istogramma'],['normality','Normality plot · banda 95% e Anderson–Darling'],['intervals','Intervalli di confidenza: media, mediana, dev. standard']].map(([key,label])=>`<label><input type="checkbox" data-plot-option="${key}" data-analysis-index="${index}"${selected[key]?' checked':''}> ${label}</label>`).join('')}<div class="histogram-controls"${selected.histogram?'':' hidden'}><label for="histogram-bins-${index}">Numero di bin (1–200)</label><input id="histogram-bins-${index}" type="number" min="1" max="200" step="1" value="${selected.histogramBins??(auto.count||1)}" data-plot-option="histogramBins" data-analysis-index="${index}"><button type="button" class="quiet small" data-auto-bins="${index}" title="Ripristina il numero di bin automatico">Automatico</button><p class="histogram-bin-mode">${selected.histogramBins===null?'Automatico: '+auto.method+(auto.capped?' · limite 40 bin':''):'Scelta manuale'}</p></div><div class="confidence-control"${selected.intervals?'':' hidden'}><label for="confidence-${index}">Livello di confidenza IC (%)</label><input id="confidence-${index}" type="number" min="50" max="99.9" step="0.1" value="${selected.confidence}" data-plot-option="confidence" data-analysis-index="${index}"><input type="range" min="50" max="99.9" step="0.1" value="${selected.confidence}" aria-label="Livello di confidenza IC" data-plot-option="confidence" data-analysis-index="${index}"></div></fieldset>`;
  }
  function chartsHtml(a){
   const selected=options(a);if(!selected.histogram&&!selected.normality&&!selected.intervals)return'';
   const {summary}=getPrepared(a);
   if(!summary.n)return'<p>Nessun dato numerico valido nel risultato salvato.</p>';
-  return(selected.histogram?histogramHtml(summary):'')+(selected.normality?normalityHtml(a,summary):'')+(selected.intervals?intervalHtml(summary,selected.confidence):'');
+  return(selected.histogram?histogramHtml(summary,selected.histogramBins):'')+(selected.normality?normalityHtml(a,summary):'')+(selected.intervals?intervalHtml(summary,selected.confidence):'');
  }
- const api={sampleSummary,andersonDarling,confidenceIntervals,histogram,normality,controlsHtml,chartsHtml,options};
+ const api={sampleSummary,andersonDarling,confidenceIntervals,histogram,histogramDefaults,normality,controlsHtml,chartsHtml,options};
  if(typeof module==='object'&&module.exports)module.exports=api;
  else root.AnalysisPlots=api;
 })(globalThis);

@@ -343,23 +343,33 @@ $('#analysis-list').addEventListener('input',e=>{
  const control=e.target.closest('[data-plot-option]');if(!control)return;
  const a=sheet().analyses[+control.dataset.analysisIndex];if(!a)return;
  const key=control.dataset.plotOption;
- if(!['histogram','normality','intervals','confidence'].includes(key))return;
+ if(!['histogram','normality','intervals','confidence','histogramBins'].includes(key))return;
  const options=AnalysisPlots.options(a);
  if(key==='confidence'){
   const value=Number(control.value);
   if(control.value===''||!Number.isFinite(value)||value<50||value>99.9)return;
   options.confidence=value;
+ }else if(key==='histogramBins'){
+  const value=Number(control.value),automatic=control.dataset.automatic==='true';
+  delete control.dataset.automatic;
+  if(!Number.isInteger(value)||value<1||value>200)return;
+  options.histogramBins=automatic?null:value;
  }else options[key]=control.checked;
  a.plotOptions=options;
  const general=control.closest('.general-analysis');
  general.querySelector('.confidence-control').hidden=!options.intervals;
+ general.querySelector('.histogram-controls').hidden=!options.histogram;
+ const auto=AnalysisPlots.histogramDefaults(AnalysisPlots.sampleSummary(a.snapshot||[]));
+ general.querySelector('.histogram-bin-mode').textContent=options.histogramBins===null?'Automatico: '+auto.method+(auto.capped?' · limite 40 bin':''):'Scelta manuale';
+ const binsInput=general.querySelector('[data-plot-option="histogramBins"]');
+ if(binsInput!==control)binsInput.value=options.histogramBins??(auto.count||1);
  general.querySelectorAll('[data-plot-option="confidence"]').forEach(input=>{if(input!==control)input.value=options.confidence});
  general.querySelector('.analysis-plots').innerHTML=AnalysisPlots.chartsHtml(a);
  dirty=true;
  $('#dirty').textContent='Modifiche non esportate';$('#dirty').className='saved unsaved';
  localStorage.setItem('statistica-web-autosave',JSON.stringify(project));
 });
-$('#analysis-list').addEventListener('click',e=>{const refresh=e.target.closest('[data-refresh-analysis]');if(refresh){refreshAnalysis(+refresh.dataset.refreshAnalysis);return;}let rm=e.target.closest('[data-remove-analysis]'),rp=e.target.closest('[data-report]');if(rm){sheet().analyses.splice(+rm.dataset.removeAnalysis,1);touch()}if(rp){let a=sheet().analyses[+rp.dataset.report];download((a.revision!==sheet().revision?'ATTENZIONE: analisi riferita a una revisione precedente.\n\n':'')+`${a.kind} — ${a.columnName}\nFiltro: ${a.filter}\nData: ${new Date(a.createdAt).toLocaleString('it-IT')}\n\n`+Object.entries(a.metrics).map(([k,v])=>`${k.padEnd(38)} ${fmt(v)}`).join('\n'),`report-${a.kind}.txt`,'text/plain;charset=utf-8')}});
+$('#analysis-list').addEventListener('click',e=>{const automatic=e.target.closest('[data-auto-bins]');if(automatic){const a=sheet().analyses[+automatic.dataset.autoBins];if(!a)return;const input=automatic.closest('.general-analysis').querySelector('[data-plot-option="histogramBins"]');input.value=AnalysisPlots.histogramDefaults(AnalysisPlots.sampleSummary(a.snapshot||[])).count||1;input.dataset.automatic='true';input.dispatchEvent(new Event('input',{bubbles:true}));return;}const refresh=e.target.closest('[data-refresh-analysis]');if(refresh){refreshAnalysis(+refresh.dataset.refreshAnalysis);return;}let rm=e.target.closest('[data-remove-analysis]'),rp=e.target.closest('[data-report]');if(rm){sheet().analyses.splice(+rm.dataset.removeAnalysis,1);touch()}if(rp){let a=sheet().analyses[+rp.dataset.report];download((a.revision!==sheet().revision?'ATTENZIONE: analisi riferita a una revisione precedente.\n\n':'')+`${a.kind} — ${a.columnName}\nFiltro: ${a.filter}\nData: ${new Date(a.createdAt).toLocaleString('it-IT')}\n\n`+Object.entries(a.metrics).map(([k,v])=>`${k.padEnd(38)} ${fmt(v)}`).join('\n'),`report-${a.kind}.txt`,'text/plain;charset=utf-8')}});
 $('#csv-file').onchange=async e=>{let f=e.target.files[0];e.target.value='';if(!f)return;try{let t=(await f.text()).replace(/^\uFEFF/,'');addImported(csvParse(t,detectSep(t)),f.name.replace(/\.csv$/i,''))}catch(err){alert(err.message)}};$('#import-csv').onclick=()=>$('#csv-file').click();$('#paste-data').onclick=async()=>{let ans=await modal('Incolla tabella','<p>Incolla i dati copiati da Excel. La prima riga deve contenere le intestazioni.</p><textarea id="paste-area" placeholder="Intestazione 1\tIntestazione 2"></textarea>');if(ans!=='ok')return;try{addImported(csvParse($('#paste-area').value.trim(), '\t'),'Incolla')}catch(e){alert(e.message)}};$('#export-csv').onclick=()=>exportCsv(false);
 $('#save-project').onclick=saveProject;$('#project-file').onchange=async e=>{let f=e.target.files[0];e.target.value='';if(f)try{await openProjectFile(f)}catch(err){alert(err.message)}};$('#open-project').onclick=()=>$('#project-file').click();$('#new-project').onclick=async()=>{if(dirty&&await modal('Nuovo progetto','<p>Le modifiche correnti non esportate verranno sostituite. Vuoi continuare?</p>')!=='ok')return;project={formatVersion:2,applicationVersion:'web-0.1',activeSheetId:'',joins:[],sheets:[]};let s=newSheet('Foglio 1',['C1','C2','C3'],[['','','']]);project.sheets=[s];project.activeSheetId=s.id;dirty=true;render()};
 $('#join-settings').onclick=async()=>{let opts=project.sheets.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');let body=`<p>Le definizioni di join vengono conservate nel progetto. Questa versione web le salva, ma non esegue ancora la join.</p><div class="join-row"><div><label>Foglio sinistro</label><select id="jl">${opts}</select></div><div><label>Foglio destro</label><select id="jr">${opts}</select></div><div><label>Tipo</label><select id="jt"><option>Left</option><option>Inner</option><option>Full</option></select></div></div><div id="join-keys"></div><ul class="join-list">${project.joins.map(j=>`<li>${esc(j.name)} · ${j.type}</li>`).join('')||'<li>Nessun collegamento salvato.</li>'}</ul>`;let ans=await modal('Collegamenti tra fogli',body,[['Chiudi','cancel','quiet'],['Aggiungi definizione','ok','primary']]);if(ans!=='ok')return;let l=project.sheets.find(s=>s.id===$('#jl').value),r=project.sheets.find(s=>s.id===$('#jr').value);if(l===r)return alert('Seleziona due fogli diversi.');let ln=l.columns[0],rn=r.columns[0];project.joins.push({id:uid(),name:`${l.name}.${ln.name} = ${r.name}.${rn.name}`,leftSheetId:l.id,rightSheetId:r.id,type:$('#jt').value,keys:[{leftColumnId:ln.id,rightColumnId:rn.id}]});touch()};

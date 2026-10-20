@@ -45,3 +45,16 @@ test('Large sample uses the stated fitted-normal asymptotic band',()=>{
  const result=plots.normality(sample(reference.cases.find(c=>c.name==='large10000').data));
  assert.equal(result.simulated,false);assert.equal(result.points.length,10000);assert.ok(result.points.every(p=>Number.isFinite(p.low)&&Number.isFinite(p.high)));
 });
+test('Histogram defaults use Freedman–Diaconis, Sturges fallback and the automatic cap',()=>{
+ const s=sample(reference.cases[0].data),auto=plots.histogramDefaults(s);
+ assert.equal(auto.method,'Freedman–Diaconis');assert.equal(auto.count,3);
+ const sparse=plots.histogramDefaults(sample([0,0,0,0,0,0,0,0,0,10]));assert.equal(sparse.method,'Sturges');assert.equal(sparse.count,5);
+ const capped=plots.histogramDefaults(sample([...Array.from({length:100},(_,i)=>i),1e9]));assert.equal(capped.count,40);assert.equal(capped.capped,true);
+ assert.equal(plots.histogramDefaults(sample([2,2,2])).count,1);
+});
+test('Manual bin count is exact, retains every value and validates its bounds',()=>{
+ for(const data of [reference.cases[0].data,[2,2,2],[-3,-2,0,1,100]]){
+  for(const count of [1,2,8,200]){const bins=plots.histogram(sample(data),count);assert.equal(bins.length,count);assert.equal(bins.reduce((sum,b)=>sum+b.count,0),data.length)}
+ }
+ for(const count of [0,201,2.5,NaN])assert.throws(()=>plots.histogram(sample([1,2]),count));
+});
