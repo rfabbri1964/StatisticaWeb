@@ -58,7 +58,29 @@ async function runAnalysis(kind){
  s.selectedColumn=col;
  computeAdd(s,kind,col,-1);
 }
-function computeAdd(s,kind,col,group){try{s.analyses.push(calc(s,kind,col,group));s.selectedAnalysis=s.analyses.length-1;touch(s)}catch(e){alert(e.message)}}
+function analysisResultKey(a){
+ const {id,createdAt,revision,...result}=a;
+ return JSON.stringify(result);
+}
+function computeAdd(s,kind,col,group){
+ try{
+  const result=calc(s,kind,col,group),key=analysisResultKey(result);
+  const existing=s.analyses.find(a=>analysisResultKey(a)===key);
+  if(existing){
+   result.id=existing.id;
+   result.createdAt=existing.createdAt;
+   s.analyses=s.analyses.filter(a=>a===existing||analysisResultKey(a)!==key);
+   s.selectedAnalysis=s.analyses.indexOf(existing);
+   s.analyses[s.selectedAnalysis]=result;
+  }else{
+   s.analyses.push(result);
+   s.selectedAnalysis=s.analyses.length-1;
+  }
+  dirty=true;
+  localStorage.setItem('statistica-web-autosave',JSON.stringify(project));
+  render();
+ }catch(e){alert(e.message)}
+}
 function getVal(node,name){return node.querySelector(`[data-${name}]`)}
 $('#sheet-list').addEventListener('click',e=>{let b=e.target.closest('[data-sheet]');if(b){project.activeSheetId=b.dataset.sheet;render()}});
 $('#add-sheet').onclick=async()=>{let ans=await modal('Nuovo foglio','<label>Nome del foglio</label><input id="new-name" value="Foglio '+(project.sheets.length+1)+'">');if(ans!=='ok')return;let name=$('#new-name').value.trim();if(!name||project.sheets.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('Scegli un nome univoco.');let s=newSheet(name,['C1','C2','C3'],Array.from({length:20},()=>['','','']));s.columns=s.columns.map(c=>({...c,kind:'Nominal'}));project.sheets.push(s);project.activeSheetId=s.id;touch(s)};
