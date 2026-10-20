@@ -1,5 +1,7 @@
 # Statistica Web
 
+Per riprendere lo sviluppo in un’altra sessione Codex, leggere [la guida di continuità](../CONTINUITA.md) e `AGENTS.md` nella radice del repository.
+
 Versione browser del software desktop StatisticaWindows 0.3. La schermata usa solo HTML, CSS e JavaScript: non richiede installazione, server applicativo o librerie esterne. Apri `index.html` in un browser moderno. Le modifiche sono salvate automaticamente nel browser corrente; usa **Esporta progetto** per conservarne una copia e trasferirla su un altro dispositivo.
 
 ## Funzioni portate
