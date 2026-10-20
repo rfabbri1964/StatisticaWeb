@@ -7,7 +7,7 @@ Versione browser del software desktop StatisticaWindows 0.3. La schermata usa so
 - Importazione CSV UTF-8 delimitati da punto e virgola, virgola o tabulazione, e incolla di tabelle da Excel.
 - Progetti con più fogli, modifica delle celle, aggiunta di righe e colonne e filtri combinati in AND.
 - Rilevamento o selezione manuale del tipo di colonna numerico, nominale o ordinale.
-- Statistica descrittiva (anche per categoria) e carta I-MR sperimentale, con report testuale e grafici.
+- Statistica descrittiva (anche per categoria), con report testuale e grafici.
 - Apertura dei progetti legacy `.statproj` creati dall'app Windows 0.2 e 0.3, oltre ai progetti JSON web.
 - Esportazione dei dati in CSV. Ctrl+S esporta il progetto; Ctrl+O lo apre.
 

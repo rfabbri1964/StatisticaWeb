@@ -31,7 +31,7 @@
         <div class="table-footer"><span id="table-status">Modifica le celle direttamente nella tabella</span><span>Formato numeri: virgola o punto decimale</span></div>
       </section>
       <section class="analysis-section">
-        <div class="analysis-head"><div><div class="eyebrow">RISULTATI</div><h2>Analisi</h2></div><div class="analysis-controls"><label for="analysis-column">Variabile</label><select id="analysis-column"></select><button id="run-descriptive" class="primary">Statistica descrittiva</button><button id="run-imr" class="secondary">Carta I-MR</button></div></div>
+        <div class="analysis-head"><div><div class="eyebrow">RISULTATI</div><h2>Analisi</h2></div><div class="analysis-controls"><label for="analysis-column">Variabile</label><select id="analysis-column"></select><button id="run-descriptive" class="primary">Statistica descrittiva</button></div></div>
         <div id="analysis-list" class="analysis-list"></div>
         <div id="empty-analysis" class="empty-state"><div class="empty-icon">▥</div><strong>Nessuna analisi ancora</strong><span>Scegli una variabile e avvia una statistica descrittiva o una carta I-MR.</span></div>
       </section>
@@ -40,6 +40,6 @@
   <input id="csv-file" type="file" accept=".csv,text/csv,.txt" hidden>
   <input id="project-file" type="file" accept=".statproj,.json,.xml,application/json,text/xml" hidden>
   <dialog id="modal"><form method="dialog"><button class="modal-close" value="cancel" aria-label="Chiudi">×</button><div id="modal-content"></div></form></dialog>
-  <script src="app.js?v=20261021-dedup2"></script>
+  <script src="app.js?v=20261021-no-imr"></script>
 </body>
 </html>
