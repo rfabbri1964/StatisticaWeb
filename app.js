@@ -20,7 +20,53 @@ function render(){if(!project.sheets.length)init();deduplicateSavedAnalyses();le
  $('#data-table').innerHTML='<thead><tr><th>#</th>'+s.columns.map((c,i)=>`<th title="${esc(c.kind)}" data-col="${i}">${esc(c.name)} <span class="column-kind">${c.kind==='Numeric'?'123':c.kind==='Ordinal'?'↕':'Aa'}</span></th>`).join('')+'</tr></thead><tbody>'+vis.map(({r,i})=>`<tr><td>${i+1}</td>${r.map((v,j)=>`<td><input aria-label="Riga ${i+1}, ${esc(s.columns[j].name)}" data-row="${i}" data-col="${j}" value="${esc(v)}"></td>`).join('')}</tr>`).join('')+'</tbody>';
  $('#analysis-list').innerHTML=s.analyses.map((a,i)=>analysisHtml(a,i,s)).join('');$('#empty-analysis').classList.toggle('hidden',s.analyses.length>0);
  $('#clear-filters').disabled=s.filters.length===0;$('#clear-filters').style.opacity=s.filters.length===0?'.5':'1';
+ setupColumnResize();
 }
+function setupColumnResize(){
+ let saved={};
+ try{saved=JSON.parse(localStorage.getItem('statistica-column-widths')||'{}')}catch{}
+ document.querySelectorAll('#data-table,.group-table table').forEach(table=>{
+  const headers=[...table.querySelectorAll('thead th')];
+  const analysis=table.closest('.analysis-card');
+  const index=analysis?[...analysis.parentNode.children].indexOf(analysis):-1;
+  const key=sheet().id+':'+(index<0?'data':sheet().analyses[index].id);
+  const keys=headers.map((th,i)=>index<0?(i===0?'row':sheet().columns[i-1].id):th.textContent);
+  const widths=headers.map((th,i)=>Math.max(46,saved[key]?.[keys[i]]||Math.ceil(th.getBoundingClientRect().width)));
+  const cols=document.createElement('colgroup');
+  widths.forEach(width=>{const col=document.createElement('col');col.style.width=width+'px';cols.append(col)});
+  table.prepend(cols);
+  table.classList.add('resizable-table');
+  const apply=()=>{table.style.width=widths.reduce((sum,w)=>sum+w,0)+'px';[...cols.children].forEach((col,i)=>col.style.width=widths[i]+'px')};
+  apply();
+  headers.forEach((th,i)=>{
+   const handle=document.createElement('span');
+   handle.className='column-resizer';handle.title='Trascina per modificare la larghezza';
+   handle.addEventListener('dblclick',e=>e.stopPropagation());
+   handle.addEventListener('pointerdown',e=>{
+    if(e.button!==0)return;
+    e.preventDefault();e.stopPropagation();
+    const start=e.clientX,width=widths[i];
+    handle.setPointerCapture(e.pointerId);
+    document.body.classList.add('resizing-columns');
+    const move=event=>{widths[i]=Math.max(46,Math.round(width+event.clientX-start));apply()};
+    const finish=()=>{
+     handle.removeEventListener('pointermove',move);
+     handle.removeEventListener('pointerup',finish);
+     handle.removeEventListener('pointercancel',finish);
+     document.body.classList.remove('resizing-columns');
+     saved[key]=Object.fromEntries(keys.map((k,j)=>[k,widths[j]]));
+     localStorage.setItem('statistica-column-widths',JSON.stringify(saved));
+     localStorage.setItem('statistica-web-autosave',JSON.stringify(project));
+    };
+    handle.addEventListener('pointermove',move);
+    handle.addEventListener('pointerup',finish);
+    handle.addEventListener('pointercancel',finish);
+   });
+   th.append(handle);
+  });
+ });
+}
+
 function stats(xs,miss=0){if(!xs.length)throw Error('Nessun dato numerico valido nella selezione.');let sorted=[...xs].sort((a,b)=>a-b),mean=xs.reduce((a,b)=>a+b,0)/xs.length,ss=xs.reduce((a,v)=>a+(v-mean)**2,0),n=xs.length;return{'N validi':n,'N mancanti':miss,'N totale':n+miss,'Media':mean,'Mediana':n%2?sorted[n>>1]:sorted[n/2-1]/2+sorted[n/2]/2,'Deviazione standard campionaria':n>1?Math.sqrt(ss/(n-1)):NaN,'Varianza campionaria':n>1?ss/(n-1):NaN,'Errore standard della media':n>1?Math.sqrt(ss/(n-1))/Math.sqrt(n):NaN,'Minimo':sorted[0],'Massimo':sorted[n-1],'Ampiezza':sorted[n-1]-sorted[0],'Somma':xs.reduce((a,b)=>a+b,0)}}
 function valuesFor(s,col,selected){let xs=[],miss=0,obs=[];for(let i of selected){let v=s.rows[i][col],n=number(v);if(missing(v)){miss++;continue}if(n===null)throw Error(`Colonna ${s.columns[col].name}, riga ${i+1}: valore non numerico.`);xs.push(n);obs.push({row:i+1,value:n})}return{xs,miss,obs}}
 function calc(s,kind,col,group=-1){let selected=visibleRows(s).map(x=>x.i),{xs,miss,obs}=valuesFor(s,col,selected);if(!xs.length)throw Error('Nessun dato numerico valido nella selezione.');let metrics,groups=null;if(kind==='I-MR'){let mrs=[];for(let i=1;i<obs.length;i++)if(obs[i].row===obs[i-1].row+1)mrs.push(Math.abs(obs[i].value-obs[i-1].value));if(!mrs.length)throw Error('SPC: servono almeno due misure su righe originali consecutive.');metrics=stats(xs,miss);let mr=mrs.reduce((a,b)=>a+b,0)/mrs.length,sigma=mr/1.128,mean=metrics.Media;Object.assign(metrics,{'Coppie MR valide':mrs.length,'MR medio':mr,'Sigma entro (MR / 1,128)':sigma,'LCL I':mean-3*sigma,'CL I':mean,'UCL I':mean+3*sigma,'LCL MR':Math.max(0,mr-3*.8525*sigma),'CL MR':mr,'UCL MR':mr+3*.8525*sigma,'Punti I oltre i limiti':obs.filter(o=>o.value<mean-3*sigma||o.value>mean+3*sigma).length})}else{metrics=stats(xs,miss);if(group>=0){let c=s.columns[group],map=new Map();for(let i of selected){let key=missing(s.rows[i][group])?null:s.rows[i][group].trim();if(!map.has(key))map.set(key,[]);map.get(key).push(i)}groups=[...map.entries()].sort(([a],[b])=>a===null?1:b===null?-1:c.kind==='Ordinal'?c.levels.indexOf(a)-c.levels.indexOf(b):String(a).localeCompare(String(b),'it'));groups=groups.map(([category,rows])=>{let v=valuesFor(s,col,rows);return{category:category??'(mancante)',categoryMissing:category===null,snapshot:v.obs,metrics:v.xs.length?stats(v.xs,v.miss):{'N validi':0,'N mancanti':v.miss,'N totale':v.miss,'Media':NaN,'Mediana':NaN,'Deviazione standard campionaria':NaN,'Varianza campionaria':NaN,'Errore standard della media':NaN,'Minimo':NaN,'Massimo':NaN,'Ampiezza':NaN,'Somma':NaN}}})}}
