@@ -28,7 +28,7 @@
         <div class="card-toolbar"><div class="toolbar-title"><span class="table-icon">▦</span><strong>Tabella dati</strong><span id="visible-count" class="count-pill"></span></div><div class="toolbar-actions"><button id="clear-filters" class="quiet small">Rimuovi filtri</button><button id="filter-toggle" class="quiet small">＋ Aggiungi filtro</button></div></div>
         <div id="filter-panel" class="filter-panel hidden"><select id="filter-column"></select><select id="filter-op"><option>=</option><option>≠</option><option>contiene</option><option>&gt;</option><option>≥</option><option>&lt;</option><option>≤</option><option>vuoto</option><option>non vuoto</option></select><input id="filter-value" placeholder="Valore"><button id="apply-filter" class="primary small">Applica</button></div>
         <div class="table-wrap"><table id="data-table"></table></div>
-        <div class="table-footer"><span id="table-status">Modifica le celle direttamente nella tabella</span><span>Formato numeri: virgola o punto decimale</span></div>
+        <div class="table-footer"><span id="table-status">Doppio clic sull’intestazione per modificare o eliminare una colonna</span><span>Formato numeri: virgola o punto decimale</span></div>
       </section>
       <section class="analysis-section">
         <div class="analysis-head"><div><div class="eyebrow">RISULTATI</div><h2>Analisi</h2></div><div class="analysis-controls"><label for="analysis-column">Variabile</label><select id="analysis-column"></select><button id="run-descriptive" class="primary">Statistica descrittiva</button></div></div>
@@ -40,6 +40,6 @@
   <input id="csv-file" type="file" accept=".csv,text/csv,.txt" hidden>
   <input id="project-file" type="file" accept=".statproj,.json,.xml,application/json,text/xml" hidden>
   <dialog id="modal"><form method="dialog"><button class="modal-close" value="cancel" aria-label="Chiudi">×</button><div id="modal-content"></div></form></dialog>
-  <script src="app.js?v=20261021-no-analysis-chart"></script>
+  <script src="app.js?v=20261021-delete-column"></script>
 </body>
 </html>
