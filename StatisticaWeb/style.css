@@ -32,3 +32,6 @@ body.table-maximized{overflow:hidden}
 .data-card[data-window-mode=minimized] .card-toolbar{border-bottom:0}
 
 .histogram-controls{padding-top:9px;margin-top:9px;border-top:1px solid #edf0f3}.histogram-controls[hidden]{display:none}.histogram-controls label{display:block;font-size:11px;color:#536174;margin-bottom:6px}.histogram-controls input{width:90px;padding:6px;border:1px solid #dfe5ec;border-radius:5px}.histogram-controls button{margin-left:8px}.histogram-bin-mode{font-size:11px;color:#788494;margin:6px 0 0}
+
+
+.filter-panel{flex-wrap:wrap;align-items:flex-start}#filter-editor{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.filter-categories{border:1px solid #dfe5ec;border-radius:6px;padding:10px;min-width:240px;max-width:100%;font-size:12px}.filter-category-list{max-height:220px;overflow:auto}.filter-category-list label{display:flex;align-items:center;gap:8px;margin:5px 0;font-size:12px}.filter-category-list input[type=checkbox]{width:16px;height:16px;padding:0;flex:none}.filter-category-actions{display:flex;gap:12px;margin-bottom:8px}.filter-category-actions button{font-size:11px;color:#1769e0}#column-filter-editor [hidden],#filter-editor [hidden]{display:none}

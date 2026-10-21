@@ -21,6 +21,8 @@ L'agente deve leggere le istruzioni, verificare lo stato locale e remoto e prose
 
 ## Funzioni attualmente realizzate
 
+- Filtri per tipo: calendari per colonne Data (riconoscimento automatico italiano/ISO e scelta manuale nelle proprietà), confronti cronologici e intervallo inclusivo. Checkbox multiple per categorie nominali/ordinali, seleziona/deseleziona tutte, categorie alternative OR e filtri AND. Valori mancanti selezionabili, persistenza browser/progetto. Test dedicato: `tests/browser-filters.py`.
+
 - Statistica descrittiva: scelta esplicita della colonna numerica e raggruppamento facoltativo per categoria.
 - Gli 11 campi descrittivi generali compaiono anche nella tabella per categoria.
 - Analisi identiche deduplicate, comprese quelle salvate in precedenza. Le scelte dei grafici non creano duplicati.
@@ -53,3 +55,4 @@ Non c'è un limite totale di righe esplicito. `＋ Righe` aggiunge al massimo 10
 ## Preferenze da conservare
 
 L'utente richiede spiegazioni in italiano, concrete e, quando serve, un passaggio alla volta basato sulle schermate effettivamente visibili. Non vuole copiare codice o scaricare ZIP a ogni modifica. Preferisce che l'agente modifichi, provi e, quando autorizzato nel contesto, invii l'aggiornamento al repository che pubblica il sito. Una schermata del browser automatico è uno screenshot di test, non un'anteprima interattiva dell'utente.
+

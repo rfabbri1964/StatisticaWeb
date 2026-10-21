@@ -54,3 +54,10 @@ L'elaborazione è locale nel browser: questa pagina non invia i dati a un server
 ## Origine
 
 Basato sul progetto desktop `StatisticaWindows` 0.3, generato da Codex il 20 ottobre 2026. Il programma è un'anteprima e non dichiara conformità AIAG/VDA o equivalenza completa con MINITAB.
+
+
+## Filtri per tipo di colonna
+
+Le colonne Data (riconosciute automaticamente da date italiane giorno/mese/anno o ISO anno-mese-giorno, oppure impostate nelle proprietà) usano il calendario. È possibile scegliere una data, una soglia o un intervallo inclusivo. Le date non valide non rientrano nei confronti. Per le colonne categoriche nominali e ordinali, selezionare una o più categorie con le checkbox; sono disponibili Seleziona tutte e Deseleziona tutte. Le categorie selezionate sono alternative (OR), i filtri distinti si combinano in AND. Entrambi i comandi, Aggiungi filtro e Filtra questa colonna, usano questi controlli. Le scelte sono conservate nel browser e nei progetti esportati.
+
+Verifica browser dei filtri, con server locale attivo: `python3 tests/browser-filters.py`.
