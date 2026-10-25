@@ -85,3 +85,9 @@ Il campo e il cursore **Livello di confidenza per cluster (%)** aggiornano tutti
 Metodi: media con t di Student, mediana con binomiale esatto conservativo, deviazione standard campionaria con chi-quadro. Gli IC sono individuali, non simultanei. Media e deviazione standard assumono indipendenza e normalità all’interno del cluster; la mediana non richiede normalità. Campioni insufficienti, IC mediani non limitati e gruppi senza dati numerici validi sono indicati esplicitamente, senza barre numeriche ingannevoli.
 
 Verifiche dedicate: `node --test tests/group-confidence.test.js` e `python3 tests/browser-group-confidence.py` con server locale attivo.
+
+## Finestra delle analisi
+
+L’intera area **Analisi** si ridimensiona dall’angolo inferiore destro, come la tabella dati. Nella barra del titolo, **—** riduce l’area alla sola intestazione, **□** la ingrandisce e i comandi di ripristino recuperano le dimensioni precedenti. Un doppio clic sul titolo alterna dimensioni normali ed espanse. L’area dei risultati scorre internamente; nella vista espansa restano disponibili la scelta della variabile, il calcolo delle analisi, i grafici, i menu dei cluster e i livelli di confidenza. Ridurre o ingrandire non modifica dati o risultati.
+
+Le finestre Tabella dati e Analisi hanno controlli indipendenti; una sola alla volta occupa lo schermo. Ripristinare una finestra mantiene le dimensioni impostate col mouse nella sessione. Verifica browser dedicata: `python3 tests/browser-analysis-window.py` con server locale attivo.

@@ -21,6 +21,8 @@ L'agente deve leggere le istruzioni, verificare lo stato locale e remoto e prose
 
 ## Funzioni attualmente realizzate
 
+- Finestra dell’intera area Analisi: ridimensionamento manuale, riduzione alla barra, ingrandimento/ripristino e doppio clic sul titolo, con contenuto a scorrimento. Controlli `analysis-minimize`/`analysis-maximize`; controller condiviso con la tabella, una sola finestra massimizzata e backdrop/blocco dello scorrimento coerenti. Il DOM dei risultati e le dimensioni manuali restano intatti nei cambi di modalità. Test dedicato `tests/browser-analysis-window.py`.
+
 - IC per cluster: checkbox `ciMean`, `ciMedian`, `ciSd` in `plotOptions.groups`, ciascuna attiva un unico confronto con intervalli distinti per cluster e tabella dei limiti. Livello `plotOptions.groups.confidence` 50–99,9% (default 95%), campo/cursore indipendenti dagli IC complessivi. L’opzione overlay riguarda soltanto istogrammi/Q-Q. Persiste selezione, livello e attivazione al ricalcolo/export/import; metodi già usati per gli IC complessivi, ma sugli snapshot dei cluster. Test `tests/group-confidence.test.js`, `tests/browser-group-confidence.py`.
 
 - Grafici per cluster sotto la tabella delle categorie: checkbox indipendenti istogramma/Q-Q normale, menu a tendina con selezione multipla dei cluster, checkbox di sovrapposizione. Istogrammi sovrapposti con classi comuni e frequenze assolute; Q-Q con scale comuni, bande 95% e AD per cluster. Scelte in `plotOptions.groups`, chiavi stabili per categoria (distinte per valori mancanti), persistenza/esportazione e ricalcolo senza cambiare identità statistica o perdere le opzioni generali. Test dedicati `tests/group-plots.test.js` e `tests/browser-group-plots.py`.

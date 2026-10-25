@@ -352,31 +352,46 @@ $('#modal').addEventListener('keydown',e=>{
   if(confirm)confirm.click();
  }
 });
-function setTableWindowMode(mode){
- const card=$('.data-card'),previous=card.dataset.windowMode||'normal';
+const workspaceWindows={
+ table:{selector:'.data-card',header:'.card-toolbar',label:'tabella'},
+ analysis:{selector:'.analysis-section',header:'.analysis-head',label:'analisi'}
+};
+function setWorkspaceWindowMode(name,mode){
+ const config=workspaceWindows[name];if(!config||!['normal','minimized','maximized'].includes(mode))return;
+ const card=$(config.selector),previous=card.dataset.windowMode||'normal';
+ // A single maximized window owns the shared backdrop and page scroll lock.
+ if(mode==='maximized')for(const [other,settings] of Object.entries(workspaceWindows)){
+  if(other!==name&&$(settings.selector).dataset.windowMode==='maximized')setWorkspaceWindowMode(other,'normal');
+ }
  if(mode==='minimized'&&previous!=='minimized')card.dataset.restoreMode=previous;
  card.dataset.windowMode=mode;
- document.body.classList.toggle('table-maximized',mode==='maximized');
- $('#table-window-backdrop').hidden=mode!=='maximized';
- const minimize=$('#table-minimize'),maximize=$('#table-maximize');
+ const minimize=$('#'+name+'-minimize'),maximize=$('#'+name+'-maximize');
  minimize.textContent=mode==='minimized'?'▣':'—';
- minimize.title=mode==='minimized'?'Ripristina tabella':'Riduci tabella';
+ minimize.title=(mode==='minimized'?'Ripristina ':'Riduci ')+config.label;
  minimize.setAttribute('aria-label',minimize.title);
  minimize.setAttribute('aria-expanded',String(mode!=='minimized'));
  maximize.textContent=mode==='maximized'?'❐':'□';
- maximize.title=mode==='maximized'?'Ripristina dimensioni':'Ingrandisci tabella';
+ maximize.title=mode==='maximized'?'Ripristina dimensioni':'Ingrandisci '+config.label;
  maximize.setAttribute('aria-label',maximize.title);
  maximize.setAttribute('aria-pressed',String(mode==='maximized'));
+ let maximized=false;
+ for(const [key,settings] of Object.entries(workspaceWindows)){
+  const active=$(settings.selector).dataset.windowMode==='maximized';
+  document.body.classList.toggle(key+'-maximized',active);maximized||=active;
+ }
+ $('#table-window-backdrop').hidden=!maximized;
 }
-$('#table-minimize').onclick=()=>{
- const card=$('.data-card');
- setTableWindowMode(card.dataset.windowMode==='minimized'?(card.dataset.restoreMode||'normal'):'minimized');
-};
-$('#table-maximize').onclick=()=>setTableWindowMode($('.data-card').dataset.windowMode==='maximized'?'normal':'maximized');
-$('.card-toolbar').addEventListener('dblclick',e=>{
- if(e.target.closest('button,input,select'))return;
- setTableWindowMode($('.data-card').dataset.windowMode==='maximized'?'normal':'maximized');
-});
+function setTableWindowMode(mode){setWorkspaceWindowMode('table',mode)}
+function setAnalysisWindowMode(mode){setWorkspaceWindowMode('analysis',mode)}
+for(const [name,config] of Object.entries(workspaceWindows)){
+ const card=$(config.selector),toggleMaximize=()=>setWorkspaceWindowMode(name,card.dataset.windowMode==='maximized'?'normal':'maximized');
+ $('#'+name+'-minimize').onclick=()=>setWorkspaceWindowMode(name,card.dataset.windowMode==='minimized'?(card.dataset.restoreMode||'normal'):'minimized');
+ $('#'+name+'-maximize').onclick=toggleMaximize;
+ card.querySelector(config.header).addEventListener('dblclick',e=>{
+  if(e.target.closest('button,input,select,textarea,label,a,summary'))return;
+  toggleMaximize();
+ });
+}
 $('#table-add-column').onclick=()=>$('#add-column').click();
 $('#table-add-rows').onclick=()=>$('#add-rows').click();
 
