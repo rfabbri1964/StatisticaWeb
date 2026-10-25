@@ -61,3 +61,7 @@ Basato sul progetto desktop `StatisticaWindows` 0.3, generato da Codex il 20 ott
 Le colonne Data (riconosciute automaticamente da date italiane giorno/mese/anno o ISO anno-mese-giorno, oppure impostate nelle proprietà) usano il calendario. È possibile scegliere una data, una soglia o un intervallo inclusivo. Le date non valide non rientrano nei confronti. Per le colonne categoriche nominali e ordinali, selezionare una o più categorie con le checkbox; sono disponibili Seleziona tutte e Deseleziona tutte. Le categorie selezionate sono alternative (OR), i filtri distinti si combinano in AND. Entrambi i comandi, Aggiungi filtro e Filtra questa colonna, usano questi controlli. Le scelte sono conservate nel browser e nei progetti esportati.
 
 Verifica browser dei filtri, con server locale attivo: `python3 tests/browser-filters.py`.
+
+## Esportazione con nome e cartella
+
+Esporta progetto (o Ctrl+S) apre la finestra Salva con nome nei browser che supportano File System Access, come Chrome ed Edge su desktop: scegliere nome e cartella. Negli altri browser viene richiesto il nome; la cartella segue le impostazioni dei download del browser (attivare la richiesta della destinazione per ogni file). Annullare o un errore di scrittura non segnano il progetto come esportato.

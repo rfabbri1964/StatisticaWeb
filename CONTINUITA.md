@@ -1,6 +1,6 @@
 # Riprendere StatisticaWeb in un'altra sessione
 
-Aggiornato il 21 ottobre 2026.
+Aggiornato il 25 ottobre 2026.
 
 ## Dove si trova il lavoro
 
@@ -20,6 +20,8 @@ Apri una nuova sessione Codex, seleziona `rfabbri1964/StatisticaWeb` sul branch 
 L'agente deve leggere le istruzioni, verificare lo stato locale e remoto e proseguire senza ricostruire l'app da zero. Il vecchio ambiente cloud non garantisce di avere già gli ultimi commit.
 
 ## Funzioni attualmente realizzate
+
+- Esporta progetto/Ctrl+S: finestra nativa con nome e cartella tramite showSaveFilePicker (Chrome/Edge desktop); alternativa con nome modificabile e istruzioni cartella per altri browser. Annullamento/errori conservano lo stato non esportato; esportazione concorrente bloccata e modifiche durante il salvataggio conservate.
 
 - Filtri per tipo: calendari per colonne Data (riconoscimento automatico italiano/ISO e scelta manuale nelle proprietà), confronti cronologici e intervallo inclusivo. Checkbox multiple per categorie nominali/ordinali, seleziona/deseleziona tutte, categorie alternative OR e filtri AND. Valori mancanti selezionabili, persistenza browser/progetto. Test dedicato: `tests/browser-filters.py`.
 
