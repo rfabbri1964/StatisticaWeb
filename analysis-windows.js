@@ -24,6 +24,9 @@
   if(!config||renderedProject!==config.getProject())return null;
   return renderedProject.sheets.find(sheet=>sheet.id===card.dataset.sheetId)?.analyses.find(analysis=>analysis.id===card.dataset.analysisId)||null;
  }
+ function activate(card){
+  if(card&&typeof config?.onActivate==='function')config.onActivate(card.dataset.sheetId,card.dataset.analysisId);
+ }
  function refreshTitleInput(input){input.size=Math.max(10,Math.min(32,[...input.value].length+1))}
  function commitTitle(input=document.activeElement){
   if(!input?.matches?.('.analysis-result-title'))return;
@@ -109,6 +112,7 @@
  function reveal(id){
   if(!config)return;
   const card=cards().find(item=>item.dataset.analysisId===id);if(!card)return;
+  if(query('.data-card')?.dataset.windowMode==='maximized')workspaceMode('table','normal');
   const otherMaximum=cards().some(item=>item!==card&&item.dataset.windowMode==='maximized');
   if(otherMaximum)exitMaximized(false);
   if(query('.analysis-section')?.dataset.windowMode==='minimized')workspaceMode('analysis',query('.analysis-section').dataset.restoreMode||'normal');
@@ -117,6 +121,7 @@
   card.scrollIntoView({block:'nearest',inline:'nearest'});
   if(!card.hasAttribute('tabindex'))card.setAttribute('tabindex','-1');
   card.focus({preventScroll:true});
+  activate(card);
  }
  function arrange(){
   if(!config)return;
@@ -134,6 +139,7 @@
   if(config)return;
   config=settings;
   const list=query('#analysis-list');
+  list.addEventListener('pointerdown',event=>activate(event.target.closest('.analysis-result-window')));
   list.addEventListener('click',event=>{
    const button=event.target.closest('[data-analysis-window-action]');if(!button)return;
    const card=button.closest('.analysis-result-window');if(!card)return;
@@ -147,6 +153,7 @@
    setMode(card,card.dataset.windowMode==='maximized'?'normal':'maximized');
   });
   list.addEventListener('focusin',event=>{
+   activate(event.target.closest('.analysis-result-window'));
    if(event.target.matches('.analysis-result-title'))event.target.select();
   });
   list.addEventListener('input',event=>{

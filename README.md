@@ -101,3 +101,9 @@ Ogni risultato del foglio corrente è una finestra indipendente nell’area Anal
 Il titolo di ciascun risultato si modifica direttamente con Invio/clic fuori per confermare ed Esc per annullare, ed è salvato nel progetto. Ricalcolare un’analisi identica riapre la finestra esistente, senza creare duplicati. Le dimensioni e la modalità di ciascuna finestra vengono mantenute durante i ricalcoli e i cambi di foglio nella sessione. **Rimuovi** elimina il risultato; ridurre una finestra conserva i dati e le impostazioni. Si può ingrandire una finestra alla volta, con ripristino delle dimensioni precedenti.
 
 Verifica dedicata: `python3 tests/browser-multiple-analyses.py` con server locale attivo.
+
+## Elenco delle analisi nella barra laterale
+
+La sezione **ANALISI** a sinistra elenca tutte le finestre create nel progetto, mostrando il loro titolo e il foglio di appartenenza. Un clic sulla voce apre il foglio corretto e riporta in vista la relativa analisi, ripristinandola se ridotta. La voce attiva segue la finestra selezionata. I nomi si aggiornano quando vengono modificati nel titolo della finestra; rimuovere un risultato elimina anche la voce. L’elenco viene ricostruito dai risultati salvati quando si riapre il progetto, senza creare copie delle analisi.
+
+Verifica dedicata: `python3 tests/browser-analysis-sidebar.py` con server locale attivo.

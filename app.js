@@ -47,6 +47,42 @@ function commitAnalysisWindowTitle(){
  }
  $('.analysis-section').setAttribute('aria-label','Finestra analisi: '+name);
 }
+let analysisNavigationActive=null;
+function renderAnalysisNavigation(){
+ const list=$('#analysis-navigation');if(!list)return;
+ const current=sheet(),active=analysisNavigationActive;
+ const validActive=active?.project===project&&active.sheetId===current.id&&current.analyses.some(a=>a.id===active.analysisId);
+ const activeId=validActive?active.analysisId:current.analyses[current.selectedAnalysis||0]?.id;
+ const existing=new Map([...list.querySelectorAll('[data-open-analysis]')].map(button=>[JSON.stringify([button.dataset.analysisSheet,button.dataset.openAnalysis]),button]));
+ const retained=new Set();let index=0;
+ // Reuse keyed buttons so a title blur/save cannot replace a clicked navigation target.
+ for(const owner of project.sheets)for(const analysis of owner.analyses){
+  const key=JSON.stringify([owner.id,analysis.id]),name=AnalysisWindows.title(analysis);
+  let button=existing.get(key);
+  if(!button){
+   button=document.createElement('button');button.type='button';button.className='analysis-nav-item';
+   button.dataset.openAnalysis=analysis.id;button.dataset.analysisSheet=owner.id;
+   const icon=document.createElement('span');icon.className='analysis-nav-icon';icon.textContent='▥';icon.setAttribute('aria-hidden','true');
+   const text=document.createElement('span');text.className='analysis-nav-text';
+   const title=document.createElement('span');title.className='analysis-nav-title';
+   const context=document.createElement('small');context.className='analysis-nav-sheet';
+   text.append(title,context);button.append(icon,text);
+  }
+  button.querySelector('.analysis-nav-title').textContent=name;
+  button.querySelector('.analysis-nav-sheet').textContent=owner.name;
+  button.title=name+' · '+owner.name;button.setAttribute('aria-label',button.title);
+  const selected=owner.id===current.id&&analysis.id===activeId;
+  button.classList.toggle('active',selected);
+  if(selected)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current');
+  if(list.children[index]!==button)list.insertBefore(button,list.children[index]||null);
+  retained.add(button);index++;
+ }
+ for(const child of [...list.children])if(!retained.has(child))child.remove();
+ if(!index){const empty=document.createElement('div');empty.className='analysis-nav-empty';empty.textContent='Nessuna analisi creata';list.append(empty)}
+}
+function activateAnalysisNavigation(sheetId,analysisId){
+ analysisNavigationActive={project,sheetId,analysisId};renderAnalysisNavigation();
+}
 function render(){if(!project.sheets.length)init();AnalysisWindows.capture();renderAnalysisWindowTitle();deduplicateSavedAnalyses();let s=sheet();classify(s);$('#project-name').textContent=project.name||'Progetto senza nome';$('#sheet-heading').textContent=s.name;$('#table-sheet-name').textContent='· '+s.name;$('#dirty').textContent=dirty?'Modifiche non esportate':'Salvato nel browser';$('#dirty').className=dirty?'saved unsaved':'saved';$('#data-summary').textContent=`${s.rows.length.toLocaleString('it-IT')} righe · ${s.columns.length} colonne · ${s.filters.length} filtri`;
  $('#sheet-list').innerHTML=project.sheets.map(x=>`<button class="sheet-item ${x.id===s.id?'active':''}" data-sheet="${x.id}"><span class="sheet-glyph">▦</span>${esc(x.name)}</button>`).join('');
  $('#filter-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').value=Math.min(s.selectedColumn||0,s.columns.length-1);
@@ -59,6 +95,7 @@ function render(){if(!project.sheets.length)init();AnalysisWindows.capture();ren
  renderFilterEditor('filter',s,+$('#filter-column').value);
  setupColumnResize();
  AnalysisWindows.restore();
+ renderAnalysisNavigation();
 }
 function setupColumnResize(){
  let saved={};
@@ -441,6 +478,14 @@ for(const [name,config] of Object.entries(workspaceWindows)){
 $('#table-add-column').onclick=()=>$('#add-column').click();
 $('#table-add-rows').onclick=()=>$('#add-rows').click();
 
+$('#analysis-navigation').addEventListener('click',e=>{
+ const button=e.target.closest('[data-open-analysis]');if(!button)return;
+ AnalysisWindows.commitTitle();
+ const owner=project.sheets.find(s=>s.id===button.dataset.analysisSheet);
+ if(!owner||!owner.analyses.some(a=>a.id===button.dataset.openAnalysis))return;
+ if(project.activeSheetId!==owner.id){project.activeSheetId=owner.id;render()}
+ AnalysisWindows.reveal(button.dataset.openAnalysis);
+});
 $('#sheet-list').addEventListener('click',e=>{let b=e.target.closest('[data-sheet]');if(b){project.activeSheetId=b.dataset.sheet;render()}});
 $('#add-sheet').onclick=async()=>{let ans=await modal('Nuovo foglio','<label>Nome del foglio</label><input id="new-name" value="Foglio '+(project.sheets.length+1)+'">');if(ans!=='ok')return;let name=$('#new-name').value.trim();if(!name||project.sheets.some(x=>x.name.toLowerCase()===name.toLowerCase()))return alert('Scegli un nome univoco.');let s=newSheet(name,['C1','C2','C3'],Array.from({length:20},()=>['','','']));s.columns=s.columns.map(c=>({...c,kind:'Nominal'}));project.sheets.push(s);project.activeSheetId=s.id;touch(s)};
 $('#rename-sheet').onclick=async()=>{let s=sheet(),ans=await modal('Rinomina foglio',`<label>Nome</label><input id="new-name" value="${esc(s.name)}">`);if(ans!=='ok')return;let name=$('#new-name').value.trim();if(!name||project.sheets.some(x=>x!==s&&x.name.toLowerCase()===name.toLowerCase()))return alert('Scegli un nome univoco.');s.name=name;touch(s)};
@@ -552,7 +597,8 @@ $('#join-settings').onclick=async()=>{let opts=project.sheets.map(s=>`<option va
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();saveProject()}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='o'){e.preventDefault();$('#project-file').click()}});
 AnalysisWindows.init({
  getProject:()=>project,getSheet:()=>sheet(),
- saveMetadata:()=>{dirty=true;$('#dirty').textContent='Modifiche non esportate';$('#dirty').className='saved unsaved';localStorage.setItem('statistica-web-autosave',JSON.stringify(project))},
+ saveMetadata:()=>{dirty=true;$('#dirty').textContent='Modifiche non esportate';$('#dirty').className='saved unsaved';localStorage.setItem('statistica-web-autosave',JSON.stringify(project));renderAnalysisNavigation()},
+ onActivate:activateAnalysisNavigation,
  setWorkspaceMode:setWorkspaceWindowMode,syncBackdrop:syncWindowBackdrop
 });
 try{let saved=localStorage.getItem('statistica-web-autosave');if(saved){project=validateProject(JSON.parse(saved));dirty=false;render()}else init()}catch(e){init()}

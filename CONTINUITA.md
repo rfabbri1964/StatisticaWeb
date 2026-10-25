@@ -21,6 +21,8 @@ L'agente deve leggere le istruzioni, verificare lo stato locale e remoto e prose
 
 ## Funzioni attualmente realizzate
 
+- Sezione ANALISI nella barra laterale: elenco di tutti i risultati del progetto con titolo e foglio; clic cambia foglio e riapre/rivela la finestra, anche se ridotta. Evidenziazione della finestra attiva tramite callback `AnalysisWindows.onActivate`, senza cambiare dati o dirty. Pulsanti aggiornati per chiave foglio/analisi, con titoli rinominati e rimozioni coerenti; elenco derivato dai dati e ricostruito a import/reload. Sidebar scorrevole. Test `tests/browser-analysis-sidebar.py`.
+
 - Finestre indipendenti per ogni risultato del foglio attivo: titolo diretto in `windowOptions.title`, resize/min/max, contenuto scorrevole e Affianca finestre. Nuovo modulo offline `analysis-windows.js` con stato geometria/modalità per sessione separato dai dati. `windowOptions` escluso dall’identità statistica e conservato in refresh/dedup/export/import. Calcoli identici riaprono la finestra già presente. Restano il titolo e i controlli globali dell’area Analisi. Una sola vista massimizzata tra tabella, area o singolo risultato, con pulizia del backdrop a rimozione/cambio foglio. Test `tests/browser-multiple-analyses.py`.
 
 - Titolo della finestra Analisi modificabile direttamente tramite `analysis-window-name`: clic seleziona il testo, Invio/blur confermano, Esc annulla; vuoto ripristina Analisi. Metadato di progetto `analysisWindowTitle`, default retrocompatibile, persistenza/autosave/export/import senza incrementare revisioni statistiche. Ctrl+S conferma il titolo prima di esportare. Il doppio clic sul nome modifica/seleziona testo; per ingrandire usare la barra fuori dal campo. Test `tests/browser-analysis-title.py`.
