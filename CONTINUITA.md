@@ -21,6 +21,8 @@ L'agente deve leggere le istruzioni, verificare lo stato locale e remoto e prose
 
 ## Funzioni attualmente realizzate
 
+- Grafici per cluster sotto la tabella delle categorie: checkbox indipendenti istogramma/Q-Q normale, menu a tendina con selezione multipla dei cluster, checkbox di sovrapposizione. Istogrammi sovrapposti con classi comuni e frequenze assolute; Q-Q con scale comuni, bande 95% e AD per cluster. Scelte in `plotOptions.groups`, chiavi stabili per categoria (distinte per valori mancanti), persistenza/esportazione e ricalcolo senza cambiare identità statistica o perdere le opzioni generali. Test dedicati `tests/group-plots.test.js` e `tests/browser-group-plots.py`.
+
 - Esporta progetto/Ctrl+S: finestra nativa con nome e cartella tramite showSaveFilePicker (Chrome/Edge desktop); alternativa con nome modificabile e istruzioni cartella per altri browser. Annullamento/errori conservano lo stato non esportato; esportazione concorrente bloccata e modifiche durante il salvataggio conservate.
 
 - Filtri per tipo: calendari per colonne Data (riconoscimento automatico italiano/ISO e scelta manuale nelle proprietà), confronti cronologici e intervallo inclusivo. Checkbox multiple per categorie nominali/ordinali, seleziona/deseleziona tutte, categorie alternative OR e filtri AND. Valori mancanti selezionabili, persistenza browser/progetto. Test dedicato: `tests/browser-filters.py`.

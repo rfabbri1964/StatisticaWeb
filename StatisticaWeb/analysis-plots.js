@@ -183,7 +183,65 @@
   if(!summary.n)return'<p>Nessun dato numerico valido nel risultato salvato.</p>';
   return(selected.histogram?histogramHtml(summary,selected.histogramBins):'')+(selected.normality?normalityHtml(a,summary):'')+(selected.intervals?intervalHtml(summary,selected.confidence):'');
  }
- const api={sampleSummary,andersonDarling,confidenceIntervals,histogram,histogramDefaults,normality,controlsHtml,chartsHtml,options};
+ // Cluster graphics use the saved group snapshots, never the current data table.
+ function groupKey(group){return JSON.stringify([!!group.categoryMissing,String(group.category??'')])}
+ function groupLabel(group){return group.categoryMissing?'(mancante · valore assente)':String(group.category??'')}
+ function groupOptions(a){
+  const saved=a.plotOptions?.groups||{};
+  return{histogram:!!saved.histogram,normality:!!saved.normality,overlay:!!saved.overlay,selected:Array.isArray(saved.selected)?saved.selected.filter(key=>typeof key==='string'):null};
+ }
+ function groupSeries(a){
+  const selected=groupOptions(a).selected;
+  return(a.groups||[]).map((group,index)=>({group,key:groupKey(group),index,color:groupColor(index),summary:getPrepared(group).summary})).filter(item=>selected===null||selected.includes(item.key));
+ }
+ function groupColor(index){return['#1769e0','#c04c00','#00856b','#9c3dbb','#c12a61','#7b6311','#087d9e','#555fc4'][index]||`hsl(${Math.round(index*137.508)%360} 65% 36%)`}
+ function groupControlsHtml(a,index){
+  if(!a.groups?.length)return'';
+  const state=groupOptions(a),count=a.groups.filter(group=>state.selected===null||state.selected.includes(groupKey(group))).length;
+  return`<fieldset class="plot-options group-plot-options"><legend>Grafici per cluster</legend>${[['histogram','Istogramma'],['normality','Diagramma dei quantili normalizzati (Q-Q normale)']].map(([key,label])=>`<label><input type="checkbox" data-group-plot-option="${key}" data-analysis-index="${index}"${state[key]?' checked':''}> ${label}</label>`).join('')}<details class="group-selector group-cluster-menu"><summary>Cluster da visualizzare · ${count} di ${a.groups.length}</summary><div class="group-selector-menu group-cluster-panel"><div class="group-selection-actions group-cluster-actions"><button type="button" class="quiet small" data-group-select="all" data-analysis-index="${index}">Seleziona tutti</button><button type="button" class="quiet small" data-group-select="none" data-analysis-index="${index}">Deseleziona tutti</button></div><div class="group-cluster-list">${a.groups.map((group,i)=>`<label><input type="checkbox" data-group-key="${escapeText(groupKey(group))}" data-analysis-index="${index}"${state.selected===null||state.selected.includes(groupKey(group))?' checked':''}><span class="group-color group-chart-swatch" style="background:${groupColor(i)}" aria-hidden="true"></span><span>${escapeText(groupLabel(group))} · N = ${getPrepared(group).summary.n}</span></label>`).join('')}</div></div></details><label><input type="checkbox" data-group-plot-option="overlay" data-analysis-index="${index}"${state.overlay?' checked':''}> Sovrapponi i grafici dei cluster</label></fieldset>`;
+ }
+ function groupedHistogram(a){
+  const series=groupSeries(a),pooled=sampleSummary(series.flatMap(item=>item.summary.sorted)),common=histogram(pooled);
+  if(!common.length)return{series:series.map(item=>({...item,bins:[]})),bins:[],method:'Nessun dato'};
+  const low=common[0].low,high=common[common.length-1].high,width=(high-low)/common.length;
+  return{bins:common.map(bin=>({low:bin.low,high:bin.high})),method:histogramDefaults(pooled).method,series:series.map(item=>{
+   const bins=common.map(bin=>({low:bin.low,high:bin.high,count:0}));
+   item.summary.sorted.forEach(observation=>{const i=Math.min(bins.length-1,Math.max(0,Math.floor((observation.value-low)/width)));bins[i].count++});
+   return{...item,bins};
+  })};
+ }
+ function groupLegend(series){return`<ul class="group-plot-legend group-chart-legend">${series.map(item=>`<li data-group-key="${escapeText(item.key)}"><span class="group-color group-chart-swatch" style="background:${item.color}" aria-hidden="true"></span>${escapeText(groupLabel(item.group))} · N = ${item.summary.n}</li>`).join('')}</ul>`}
+ function overlayHistogramHtml(a){
+  const result=groupedHistogram(a),{series,bins}=result;
+  if(!bins.length)return'<section class="stat-plot" data-chart="group-histogram"><h4>Istogrammi sovrapposti</h4><p>Nessun dato numerico valido nei cluster selezionati.</p></section>';
+  const x=chartAxis(bins[0].low,bins[bins.length-1].high),maxCount=Math.max(1,...series.map(item=>Math.max(0,...item.bins.map(bin=>bin.count)))),y=count=>238-count/maxCount*206;
+  return`<section class="stat-plot" data-chart="group-histogram"><h4>Istogrammi sovrapposti</h4>${groupLegend(series)}${chartFrame('Istogrammi dei cluster sovrapposti con classi e scale comuni')}<text x="68" y="16">Frequenza per cluster</text>${[0,.5,1].map(t=>`<line x1="68" x2="540" y1="${y(t*maxCount)}" y2="${y(t*maxCount)}" stroke="#edf0f3"/><text x="60" y="${y(t*maxCount)+4}" text-anchor="end">${escapeText(compact(t*maxCount))}</text>`).join('')}${series.map(item=>`<g data-group-series="${escapeText(item.key)}">${item.bins.map(bin=>`<rect class="histogram-bin" data-count="${bin.count}" x="${x.map(bin.low)+1}" y="${y(bin.count)}" width="${Math.max(1,x.map(bin.high)-x.map(bin.low)-2)}" height="${238-y(bin.count)}" fill="${item.color}" fill-opacity="0.32" stroke="${item.color}" stroke-width="1"><title>${escapeText(groupLabel(item.group))} · ${escapeText(numberText(bin.low))} – ${escapeText(numberText(bin.high))}: ${bin.count}</title></rect>`).join('')}</g>`).join('')}${x.ticks}<text x="304" y="282" text-anchor="middle">Valore</text></svg><p>${bins.length} classi comuni · ${result.method} sui dati dei cluster selezionati. Frequenze assolute, barre trasparenti; le numerosità dei cluster possono differire.</p></section>`;
+ }
+ function overlayNormalityHtml(a){
+  const series=groupSeries(a).map(item=>{const cache=getPrepared(item.group);if(!cache.normal)cache.normal=normality(item.summary);return{...item,result:cache.normal}}),available=series.filter(item=>item.result.test.available);
+  const reports=series.map(item=>{const test=item.result.test;return`<li><span class="group-color group-chart-swatch" style="background:${item.color}" aria-hidden="true"></span><strong>${escapeText(groupLabel(item.group))}</strong>: ${test.available?`Anderson–Darling A² = ${numberText(test.statistic)}; p-value ${test.p<.0001?'&lt; 0,0001':'= '+numberText(test.p)}${test.smallSample?' · N &lt; 8, interpretare con cautela':''}`:escapeText(test.reason)}</li>`}).join('');
+  let graph='';
+  if(available.length){
+   // Shared limits include every band's endpoints and every observed point.
+   let low=Infinity,high=-Infinity,minZ=Infinity,maxZ=-Infinity;
+   available.forEach(item=>{const {points,band}=item.result;low=Math.min(low,points[0].value);high=Math.max(high,points[points.length-1].value);minZ=Math.min(minZ,points[0].z);maxZ=Math.max(maxZ,points[points.length-1].z);band.forEach(point=>{low=Math.min(low,point.low);high=Math.max(high,point.high)})});
+   const pad=Math.max((high-low)*.06,.000001),y=value=>238-(value-low+pad)/(high-low+2*pad)*206,x=chartAxis(minZ,maxZ);
+   graph=chartFrame('Diagrammi Q-Q normali sovrapposti dei cluster, con scale comuni')+`<text x="68" y="16">Valore osservato</text>${[0,.5,1].map(t=>{const value=low+(high-low)*t;return`<line x1="68" x2="540" y1="${y(value)}" y2="${y(value)}" stroke="#edf0f3"/><text x="60" y="${y(value)+4}" text-anchor="end">${escapeText(compact(value))}</text>`}).join('')}`+available.map(item=>{
+    const {points,band}=item.result,summary=item.summary,stride=Math.max(1,Math.ceil(points.length/1500));
+    const polygon=band.map(point=>`${x.map(point.z)},${y(point.low)}`).concat([...band].reverse().map(point=>`${x.map(point.z)},${y(point.high)}`)).join(' ');
+    return`<g data-group-series="${escapeText(item.key)}"><polygon class="normality-band" points="${polygon}" fill="${item.color}" fill-opacity="0.06" stroke="${item.color}" stroke-opacity="0.35"/><line x1="${x.map(points[0].z)}" x2="${x.map(points[points.length-1].z)}" y1="${y(summary.mean+summary.sd*points[0].z)}" y2="${y(summary.mean+summary.sd*points[points.length-1].z)}" stroke="${item.color}" stroke-dasharray="5 3"/>${points.filter((point,i)=>point.outside||i%stride===0||i===points.length-1).map(point=>`<circle class="normality-point${point.outside?' outside-band':''}" data-row="${point.row}" cx="${x.map(point.z)}" cy="${y(point.value)}" r="${point.outside?4:2.8}" fill="${item.color}" stroke="${point.outside?'#ce3543':item.color}" stroke-width="${point.outside?2:0}"><title>${escapeText(groupLabel(item.group))} · riga ${point.row}: ${escapeText(numberText(point.value))}${point.outside?' · FUORI BANDA':''}</title></circle>`).join('')}</g>`;
+   }).join('')+`${x.ticks}<text x="304" y="282" text-anchor="middle">Quantile normale teorico</text></svg>`;
+  }
+  return`<section class="stat-plot" data-chart="group-normality"><h4>Diagrammi dei quantili normalizzati sovrapposti</h4>${groupLegend(series)}${graph}<ul class="group-normality-tests">${reports}</ul><p>Q-Q: quantili normali teorici sull’asse orizzontale, valori osservati sull’asse verticale. Ogni cluster conserva media e deviazione standard proprie. Bande puntuali al 95% per cluster, non simultanee; bordo rosso per punti fuori dalla propria banda. Il test usa tutti i valori; nei campioni grandi sono diradati solo i punti interni alle bande.</p></section>`;
+ }
+ function groupChartsHtml(a){
+  const state=groupOptions(a);if(!state.histogram&&!state.normality)return'';
+  const series=groupSeries(a);if(!series.length)return'<p class="group-plot-empty">Seleziona almeno un cluster da visualizzare.</p>';
+  if(state.overlay)return(state.histogram?overlayHistogramHtml(a):'')+(state.normality?overlayNormalityHtml(a):'');
+  return series.map(item=>`<div class="group-chart-unit" data-group-key="${escapeText(item.key)}"><h4 class="group-chart-title"><span class="group-color group-chart-swatch" style="background:${item.color}" aria-hidden="true"></span>Cluster: ${escapeText(groupLabel(item.group))} · N = ${item.summary.n}</h4>${state.histogram?(item.summary.n?histogramHtml(item.summary).replace('dati complessivi.','dati del cluster.'):'<section class="stat-plot" data-chart="histogram"><h4>Istogramma</h4><p>Nessun dato numerico valido in questo cluster.</p></section>'):''}${state.normality?normalityHtml(item.group,item.summary):''}</div>`).join('');
+ }
+ const api={groupKey,groupOptions,groupControlsHtml,groupChartsHtml,groupedHistogram,sampleSummary,andersonDarling,confidenceIntervals,histogram,histogramDefaults,normality,controlsHtml,chartsHtml,options};
  if(typeof module==='object'&&module.exports)module.exports=api;
  else root.AnalysisPlots=api;
 })(globalThis);
+

@@ -65,3 +65,13 @@ Verifica browser dei filtri, con server locale attivo: `python3 tests/browser-fi
 ## Esportazione con nome e cartella
 
 Esporta progetto (o Ctrl+S) apre la finestra Salva con nome nei browser che supportano File System Access, come Chrome ed Edge su desktop: scegliere nome e cartella. Negli altri browser viene richiesto il nome; la cartella segue le impostazioni dei download del browser (attivare la richiesta della destinazione per ogni file). Annullare o un errore di scrittura non segnano il progetto come esportato.
+
+## Grafici per cluster
+
+Nelle analisi descrittive raggruppate, sotto la tabella delle categorie, due checkbox indipendenti attivano **Istogramma** e **Diagramma dei quantili normalizzati (Q-Q normale)**. Il menu **Cluster da visualizzare** contiene checkbox per selezionare uno o più cluster, con Seleziona tutti e Deseleziona tutti. **Sovrapponi i grafici dei cluster** alterna grafici separati e grafici su assi comuni, con colori e legenda.
+
+I grafici usano gli snapshot numerici dei singoli cluster, rispettando i filtri dell’analisi salvata. Negli istogrammi sovrapposti le classi sono comuni, determinate con Freedman–Diaconis (ripiego Sturges) sull’insieme dei cluster selezionati; le frequenze sono assolute. Nei Q-Q, l’asse orizzontale riporta i quantili normali teorici e quello verticale i valori osservati: ogni cluster mantiene media, deviazione standard, banda puntuale 95% e test Anderson–Darling propri. Campioni insufficienti o costanti hanno una spiegazione esplicita.
+
+Le scelte dei cluster e dei grafici si salvano nel browser e nei progetti esportati e vengono conservate al ricalcolo senza duplicare l’analisi. I grafici dei dati complessivi rimangono indipendenti. La selezione esplicita segue il nome/categoria del cluster; Seleziona tutti include anche eventuali nuove categorie al ricalcolo.
+
+Verifiche dedicate: `node --test tests/group-plots.test.js` e, con il server attivo, `python3 tests/browser-group-plots.py`.
