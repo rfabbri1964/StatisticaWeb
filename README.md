@@ -88,6 +88,8 @@ Verifiche dedicate: `node --test tests/group-confidence.test.js` e `python3 test
 
 ## Finestra delle analisi
 
-L’intera area **Analisi** si ridimensiona dall’angolo inferiore destro, come la tabella dati. Nella barra del titolo, **—** riduce l’area alla sola intestazione, **□** la ingrandisce e i comandi di ripristino recuperano le dimensioni precedenti. Un doppio clic sul titolo alterna dimensioni normali ed espanse. L’area dei risultati scorre internamente; nella vista espansa restano disponibili la scelta della variabile, il calcolo delle analisi, i grafici, i menu dei cluster e i livelli di confidenza. Ridurre o ingrandire non modifica dati o risultati.
+L’intera area **Analisi** si ridimensiona dall’angolo inferiore destro, come la tabella dati. Nella barra del titolo, **—** riduce l’area alla sola intestazione, **□** la ingrandisce e i comandi di ripristino recuperano le dimensioni precedenti. Un doppio clic sulla barra, fuori dal nome modificabile, alterna dimensioni normali ed espanse. L’area dei risultati scorre internamente; nella vista espansa restano disponibili la scelta della variabile, il calcolo delle analisi, i grafici, i menu dei cluster e i livelli di confidenza. Ridurre o ingrandire non modifica dati o risultati.
 
 Le finestre Tabella dati e Analisi hanno controlli indipendenti; una sola alla volta occupa lo schermo. Ripristinare una finestra mantiene le dimensioni impostate col mouse nella sessione. Verifica browser dedicata: `python3 tests/browser-analysis-window.py` con server locale attivo.
+
+Il nome della finestra Analisi si modifica direttamente nel titolo: cliccare, sovrascrivere e premere Invio o cliccare altrove. Esc annulla la modifica; un nome vuoto ripristina Analisi. Il nome appartiene al progetto, resta uguale tra i fogli e viene conservato nel browser e nei progetti esportati. Ctrl+S include anche il titolo appena digitato. La modifica del nome non rende obsolete le analisi.

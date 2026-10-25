@@ -25,7 +25,7 @@ with sync_playwright() as p:
         page.evaluate(FIXTURE)
         section = page.locator('.analysis-section')
         content = page.locator('.analysis-window-body')
-        title = section.locator('.analysis-head h2')
+        title = section.locator('.analysis-head .eyebrow')
         minimize = page.locator('#analysis-minimize')
         maximize = page.locator('#analysis-maximize')
         backdrop = page.locator('#table-window-backdrop')

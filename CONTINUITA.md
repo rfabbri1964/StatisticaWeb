@@ -21,6 +21,8 @@ L'agente deve leggere le istruzioni, verificare lo stato locale e remoto e prose
 
 ## Funzioni attualmente realizzate
 
+- Titolo della finestra Analisi modificabile direttamente tramite `analysis-window-name`: clic seleziona il testo, Invio/blur confermano, Esc annulla; vuoto ripristina Analisi. Metadato di progetto `analysisWindowTitle`, default retrocompatibile, persistenza/autosave/export/import senza incrementare revisioni statistiche. Ctrl+S conferma il titolo prima di esportare. Il doppio clic sul nome modifica/seleziona testo; per ingrandire usare la barra fuori dal campo. Test `tests/browser-analysis-title.py`.
+
 - Finestra dell’intera area Analisi: ridimensionamento manuale, riduzione alla barra, ingrandimento/ripristino e doppio clic sul titolo, con contenuto a scorrimento. Controlli `analysis-minimize`/`analysis-maximize`; controller condiviso con la tabella, una sola finestra massimizzata e backdrop/blocco dello scorrimento coerenti. Il DOM dei risultati e le dimensioni manuali restano intatti nei cambi di modalità. Test dedicato `tests/browser-analysis-window.py`.
 
 - IC per cluster: checkbox `ciMean`, `ciMedian`, `ciSd` in `plotOptions.groups`, ciascuna attiva un unico confronto con intervalli distinti per cluster e tabella dei limiti. Livello `plotOptions.groups.confidence` 50–99,9% (default 95%), campo/cursore indipendenti dagli IC complessivi. L’opzione overlay riguarda soltanto istogrammi/Q-Q. Persiste selezione, livello e attivazione al ricalcolo/export/import; metodi già usati per gli IC complessivi, ma sugli snapshot dei cluster. Test `tests/group-confidence.test.js`, `tests/browser-group-confidence.py`.

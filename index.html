@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#f5f7fa">
   <title>Statistica — analisi dati</title>
-  <link rel="stylesheet" href="style.css?v=20261025-analysis-window">
+  <link rel="stylesheet" href="style.css?v=20261025-analysis-title">
 </head>
 <body>
   <header class="topbar">
@@ -32,7 +32,7 @@
         <div class="table-footer"><span id="table-status">Doppio clic sull’intestazione per modificare o eliminare una colonna</span><span>Formato numeri: virgola o punto decimale</span></div>
       </section>
       <section class="analysis-section" data-window-mode="normal" aria-label="Finestra analisi">
-        <div class="analysis-head"><div class="analysis-window-title" title="Doppio clic per ingrandire o ripristinare le analisi"><div class="eyebrow">RISULTATI</div><h2>Analisi</h2></div><div class="analysis-window-actions"><div class="analysis-controls"><label for="analysis-column">Variabile</label><select id="analysis-column"></select><button id="run-descriptive" class="primary">Statistica descrittiva</button></div><div class="table-window-controls analysis-window-controls"><button id="analysis-minimize" title="Riduci analisi" aria-label="Riduci analisi" aria-expanded="true">—</button><button id="analysis-maximize" title="Ingrandisci analisi" aria-label="Ingrandisci analisi" aria-pressed="false">□</button></div></div></div>
+        <div class="analysis-head"><div class="analysis-window-title" title="Doppio clic sulla barra, fuori dal nome, per ingrandire o ripristinare"><div class="eyebrow">RISULTATI</div><h2><input id="analysis-window-name" type="text" value="Analisi" size="8" maxlength="120" aria-label="Nome della finestra analisi" title="Scrivi il nome · Invio per confermare · Esc per annullare" autocomplete="off"></h2></div><div class="analysis-window-actions"><div class="analysis-controls"><label for="analysis-column">Variabile</label><select id="analysis-column"></select><button id="run-descriptive" class="primary">Statistica descrittiva</button></div><div class="table-window-controls analysis-window-controls"><button id="analysis-minimize" title="Riduci analisi" aria-label="Riduci analisi" aria-expanded="true">—</button><button id="analysis-maximize" title="Ingrandisci analisi" aria-label="Ingrandisci analisi" aria-pressed="false">□</button></div></div></div>
         <div class="analysis-window-body">
           <div id="analysis-list" class="analysis-list"></div>
           <div id="empty-analysis" class="empty-state"><div class="empty-icon">▥</div><strong>Nessuna analisi ancora</strong><span>Avvia una statistica descrittiva e scegli la colonna da analizzare.</span></div>
@@ -45,8 +45,8 @@
   <div id="table-window-backdrop" class="table-window-backdrop" hidden></div>
   <dialog id="modal"><form method="dialog"><button class="modal-close" value="cancel" aria-label="Chiudi">×</button><div id="modal-content"></div></form></dialog>
   <script src="vendor/jstat.min.js?v=1.9.6"></script>
-  <script src="analysis-plots.js?v=20261025-analysis-window"></script>
-  <script src="app.js?v=20261025-analysis-window"></script>
+  <script src="analysis-plots.js?v=20261025-analysis-title"></script>
+  <script src="app.js?v=20261025-analysis-title"></script>
 </body>
 </html>
 
