@@ -408,8 +408,9 @@ $('#apply-filter').onclick=()=>{try{let s=sheet();s.filters.push(readFilterEdito
 $('#clear-filters').onclick=()=>{let s=sheet();if(s.filters.length){s.filters=[];touch(s)}};
 $('#run-descriptive').onclick=()=>runAnalysis('Descrittiva');$('#analysis-column').onchange=()=>{sheet().selectedColumn=+$('#analysis-column').value};
 // Chart settings do not change the analysis revision or statistical identity.
-function saveGroupPlotSettings(a,index,section,options){
+function saveGroupPlotSettings(a,index,section,options,refreshControls=true){
  a.plotOptions={...a.plotOptions,groups:options};
+ if(refreshControls){
  const host=section.querySelector('.group-plot-controls-host'),dropdown=host.querySelector('details');
  const open=!!dropdown?.open,scrollTop=host.querySelector('.group-cluster-list')?.scrollTop||0;
  const active=document.activeElement,focusKey=active?.dataset.groupKey,focusOption=active?.dataset.groupPlotOption,focusSelect=active?.dataset.groupSelect;
@@ -418,15 +419,28 @@ function saveGroupPlotSettings(a,index,section,options){
  const focus=[...host.querySelectorAll('input,button')].find(el=>focusKey!==undefined?el.dataset.groupKey===focusKey:focusOption!==undefined?el.dataset.groupPlotOption===focusOption:focusSelect!==undefined&&el.dataset.groupSelect===focusSelect);
  if(focus)focus.focus({preventScroll:true});
  const list=host.querySelector('.group-cluster-list');if(list)list.scrollTop=scrollTop;
+ }
  section.querySelector('.group-analysis-plots').innerHTML=AnalysisPlots.groupChartsHtml(a);
  dirty=true;$('#dirty').textContent='Modifiche non esportate';$('#dirty').className='saved unsaved';
  localStorage.setItem('statistica-web-autosave',JSON.stringify(project));
 }
+$('#analysis-list').addEventListener('input',e=>{
+ const control=e.target.closest('[data-group-plot-option="confidence"]');if(!control)return;
+ const index=+control.dataset.analysisIndex,a=sheet().analyses[index],section=control.closest('.group-results');if(!a||!section)return;
+ const value=Number(control.value),valid=control.value!==''&&Number.isFinite(value)&&value>=50&&value<=99.9;
+ control.setCustomValidity(valid?'':'Inserisci un livello di confidenza tra 50% e 99,9%.');
+ control.setAttribute('aria-invalid',String(!valid));
+ if(!valid)return;
+ const options=AnalysisPlots.groupOptions(a);options.confidence=value;
+ section.querySelectorAll('[data-group-plot-option="confidence"]').forEach(input=>{if(input!==control)input.value=value;input.setCustomValidity('');input.setAttribute('aria-invalid','false')});
+ // Keep the number field and slider in place while typing or dragging.
+ saveGroupPlotSettings(a,index,section,options,false);
+});
 $('#analysis-list').addEventListener('change',e=>{
  const control=e.target.closest('[data-group-plot-option],[data-group-key]');if(!control)return;
  const index=+control.dataset.analysisIndex,a=sheet().analyses[index],section=control.closest('.group-results');if(!a||!section)return;
  const options=AnalysisPlots.groupOptions(a),key=control.dataset.groupPlotOption;
- if(key){if(!['histogram','normality','overlay'].includes(key))return;options[key]=control.checked}
+ if(key){if(!['histogram','normality','overlay','ciMean','ciMedian','ciSd'].includes(key))return;options[key]=control.checked}
  else{
   const selected=new Set(options.selected===null?(a.groups||[]).map(AnalysisPlots.groupKey):options.selected);
   if(control.checked)selected.add(control.dataset.groupKey);else selected.delete(control.dataset.groupKey);

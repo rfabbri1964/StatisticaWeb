@@ -75,3 +75,13 @@ I grafici usano gli snapshot numerici dei singoli cluster, rispettando i filtri 
 Le scelte dei cluster e dei grafici si salvano nel browser e nei progetti esportati e vengono conservate al ricalcolo senza duplicare l’analisi. I grafici dei dati complessivi rimangono indipendenti. La selezione esplicita segue il nome/categoria del cluster; Seleziona tutti include anche eventuali nuove categorie al ricalcolo.
 
 Verifiche dedicate: `node --test tests/group-plots.test.js` e, con il server attivo, `python3 tests/browser-group-plots.py`.
+
+## Intervalli di confidenza per cluster
+
+Sotto la tabella delle categorie, tre checkbox indipendenti (**IC della media**, **IC della mediana**, **IC della deviazione standard**) attivano un solo grafico di confronto per parametro: ogni cluster selezionato ha la propria stima e il proprio intervallo, calcolati esclusivamente dai suoi dati salvati. I tre parametri hanno assi distinti; per ciascun parametro tutti i cluster condividono lo stesso asse. I limiti e le stime sono riportati anche in una tabella numerica. La selezione dei cluster avviene nel menu esistente.
+
+Il campo e il cursore **Livello di confidenza per cluster (%)** aggiornano tutti gli IC attivi, tra 50% e 99,9% (iniziale 95%). Il livello è indipendente da quello degli IC dei dati complessivi. La scelta **Sovrapponi istogrammi e diagrammi Q-Q dei cluster** non cambia la presentazione degli IC: resta sempre un grafico per parametro, mai un grafico separato per ogni cluster. Le scelte e il livello si salvano nel browser/progetto e vengono conservati al ricalcolo.
+
+Metodi: media con t di Student, mediana con binomiale esatto conservativo, deviazione standard campionaria con chi-quadro. Gli IC sono individuali, non simultanei. Media e deviazione standard assumono indipendenza e normalità all’interno del cluster; la mediana non richiede normalità. Campioni insufficienti, IC mediani non limitati e gruppi senza dati numerici validi sono indicati esplicitamente, senza barre numeriche ingannevoli.
+
+Verifiche dedicate: `node --test tests/group-confidence.test.js` e `python3 tests/browser-group-confidence.py` con server locale attivo.

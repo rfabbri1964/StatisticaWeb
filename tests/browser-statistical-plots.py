@@ -18,13 +18,13 @@ with sync_playwright() as p:
   number=page.locator('input[type="number"][data-plot-option="confidence"]');number.fill('99')
   assert page.locator('.ci-parameter').first.inner_text()!=before
   assert page.locator('[data-chart="intervals"] h4').inner_text().endswith('99%')
-  assert page.locator('input[type="range"]').input_value()=='99'
-  page.locator('input[type="range"]').fill('90');assert number.input_value()=='90'
+  assert page.locator('input[type="range"][data-plot-option="confidence"]').input_value()=='99'
+  page.locator('input[type="range"][data-plot-option="confidence"]').fill('90');assert number.input_value()=='90'
   page.reload();assert page.locator('[data-chart]').count()==3;assert number.input_value()=='90'
   run();assert page.locator('.analysis-card').count()==1;assert page.locator('[data-chart]').count()==3
   page.evaluate("sheet().rows[0][2]='21';touch()");page.locator('[data-refresh-analysis]').click();assert page.locator('[data-chart]').count()==3
   page.locator('[data-plot-option="histogram"]').uncheck();assert page.locator('[data-chart="histogram"]').count()==0;assert page.locator('[data-chart]').count()==2
-  page.locator('[data-plot-option="intervals"]').uncheck();assert page.locator('.confidence-control').is_hidden()
+  page.locator('[data-plot-option="intervals"]').uncheck();assert page.locator('.general-analysis .confidence-control').is_hidden()
   # A second analysis without grouping has its own controls and confidence level.
   run('-1');assert page.locator('.analysis-card').count()==2
   second=page.locator('.analysis-card').nth(1);second.locator('[data-plot-option="normality"]').check();assert second.locator('.normality-point').count()==10
@@ -36,3 +36,4 @@ with sync_playwright() as p:
   assert not errors,errors
   print(route,'PASS: independent checkboxes, all graphs, AD/band, dynamic confidence, persistence, dedup, recalculation, grouped/ungrouped, small samples');ctx.close()
  b.close()
+
