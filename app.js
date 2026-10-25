@@ -47,7 +47,7 @@ function commitAnalysisWindowTitle(){
  }
  $('.analysis-section').setAttribute('aria-label','Finestra analisi: '+name);
 }
-function render(){if(!project.sheets.length)init();renderAnalysisWindowTitle();deduplicateSavedAnalyses();let s=sheet();classify(s);$('#project-name').textContent=project.name||'Progetto senza nome';$('#sheet-heading').textContent=s.name;$('#table-sheet-name').textContent='· '+s.name;$('#dirty').textContent=dirty?'Modifiche non esportate':'Salvato nel browser';$('#dirty').className=dirty?'saved unsaved':'saved';$('#data-summary').textContent=`${s.rows.length.toLocaleString('it-IT')} righe · ${s.columns.length} colonne · ${s.filters.length} filtri`;
+function render(){if(!project.sheets.length)init();AnalysisWindows.capture();renderAnalysisWindowTitle();deduplicateSavedAnalyses();let s=sheet();classify(s);$('#project-name').textContent=project.name||'Progetto senza nome';$('#sheet-heading').textContent=s.name;$('#table-sheet-name').textContent='· '+s.name;$('#dirty').textContent=dirty?'Modifiche non esportate':'Salvato nel browser';$('#dirty').className=dirty?'saved unsaved':'saved';$('#data-summary').textContent=`${s.rows.length.toLocaleString('it-IT')} righe · ${s.columns.length} colonne · ${s.filters.length} filtri`;
  $('#sheet-list').innerHTML=project.sheets.map(x=>`<button class="sheet-item ${x.id===s.id?'active':''}" data-sheet="${x.id}"><span class="sheet-glyph">▦</span>${esc(x.name)}</button>`).join('');
  $('#filter-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').innerHTML=s.columns.map((c,i)=>`<option value="${i}">${esc(c.name)}</option>`).join('');$('#analysis-column').value=Math.min(s.selectedColumn||0,s.columns.length-1);
  let vis=visibleRows(s);$('#visible-count').textContent=`${vis.length} di ${s.rows.length}`;
@@ -58,6 +58,7 @@ function render(){if(!project.sheets.length)init();renderAnalysisWindowTitle();d
  $('#active-filters').hidden=!s.filters.length;
  renderFilterEditor('filter',s,+$('#filter-column').value);
  setupColumnResize();
+ AnalysisWindows.restore();
 }
 function setupColumnResize(){
  let saved={};
@@ -108,7 +109,7 @@ function stats(xs,miss=0){if(!xs.length)throw Error('Nessun dato numerico valido
 function valuesFor(s,col,selected){let xs=[],miss=0,obs=[];for(let i of selected){let v=s.rows[i][col],n=number(v);if(missing(v)){miss++;continue}if(n===null)throw Error(`Colonna ${s.columns[col].name}, riga ${i+1}: valore non numerico.`);xs.push(n);obs.push({row:i+1,value:n})}return{xs,miss,obs}}
 function calc(s,kind,col,group=-1){let selected=visibleRows(s).map(x=>x.i),{xs,miss,obs}=valuesFor(s,col,selected);if(!xs.length)throw Error('Nessun dato numerico valido nella selezione.');let metrics,groups=null;if(kind==='I-MR'){let mrs=[];for(let i=1;i<obs.length;i++)if(obs[i].row===obs[i-1].row+1)mrs.push(Math.abs(obs[i].value-obs[i-1].value));if(!mrs.length)throw Error('SPC: servono almeno due misure su righe originali consecutive.');metrics=stats(xs,miss);let mr=mrs.reduce((a,b)=>a+b,0)/mrs.length,sigma=mr/1.128,mean=metrics.Media;Object.assign(metrics,{'Coppie MR valide':mrs.length,'MR medio':mr,'Sigma entro (MR / 1,128)':sigma,'LCL I':mean-3*sigma,'CL I':mean,'UCL I':mean+3*sigma,'LCL MR':Math.max(0,mr-3*.8525*sigma),'CL MR':mr,'UCL MR':mr+3*.8525*sigma,'Punti I oltre i limiti':obs.filter(o=>o.value<mean-3*sigma||o.value>mean+3*sigma).length})}else{metrics=stats(xs,miss);if(group>=0){let c=s.columns[group],map=new Map();for(let i of selected){let key=missing(s.rows[i][group])?null:s.rows[i][group].trim();if(!map.has(key))map.set(key,[]);map.get(key).push(i)}groups=[...map.entries()].sort(([a],[b])=>a===null?1:b===null?-1:c.kind==='Ordinal'?c.levels.indexOf(a)-c.levels.indexOf(b):String(a).localeCompare(String(b),'it'));groups=groups.map(([category,rows])=>{let v=valuesFor(s,col,rows);return{category:category??'(mancante)',categoryMissing:category===null,snapshot:v.obs,metrics:v.xs.length?stats(v.xs,v.miss):{'N validi':0,'N mancanti':v.miss,'N totale':v.miss,'Media':NaN,'Mediana':NaN,'Deviazione standard campionaria':NaN,'Varianza campionaria':NaN,'Errore standard della media':NaN,'Minimo':NaN,'Massimo':NaN,'Ampiezza':NaN,'Somma':NaN}}})}}
  let filter=s.filters.map(f=>`${s.columns[f.column].name} ${filterDescription(f)}`).join(' AND ')||'Tutte le righe';return{id:uid(),kind,columnId:s.columns[col].id,columnName:s.columns[col].name,groupColumnId:group>=0?s.columns[group].id:null,groupColumnName:group>=0?s.columns[group].name:null,groups,snapshot:obs,metrics,filter,revision:s.revision,createdAt:new Date().toISOString()}}
-function analysisHtml(a,i,s){let stale=a.revision!==s.revision,metrics=Object.entries(a.metrics),visible=['N validi','N mancanti','Media','Mediana','Deviazione standard campionaria','Varianza campionaria','Errore standard della media','Minimo','Massimo','Ampiezza','Somma','MR medio','Sigma entro (MR / 1,128)','LCL I','CL I','UCL I','LCL MR','CL MR','UCL MR','Punti I oltre i limiti'];metrics=metrics.filter(([k])=>visible.includes(k));let group=a.groups?.length?`<div class="group-results"><p class="group-heading">Statistiche per categoria · ${esc(a.groupColumnName)}</p><div class="group-table"><table><thead><tr><th>Categoria</th>${['N validi','N mancanti','Media','Mediana','Deviazione standard campionaria','Varianza campionaria','Errore standard della media','Minimo','Massimo','Ampiezza','Somma'].map(k=>`<th>${esc(k)}</th>`).join('')}</tr></thead><tbody>${a.groups.map(g=>`<tr><td>${esc(g.category)}</td>${['N validi','N mancanti','Media','Mediana','Deviazione standard campionaria','Varianza campionaria','Errore standard della media','Minimo','Massimo','Ampiezza','Somma'].map(k=>`<td>${fmt(g.metrics[k])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${a.kind==='Descrittiva'?`<div class="group-plot-controls-host">${AnalysisPlots.groupControlsHtml(a,i)}</div><div class="group-analysis-plots" aria-live="polite">${AnalysisPlots.groupChartsHtml(a)}</div>`:''}</div>`:'';return`<article class="analysis-card"><div class="analysis-card-head"><div><div class="analysis-name"><span class="analysis-badge">${a.kind==='I-MR'?'SPC':'DESCRITTIVA'}</span>${esc(a.columnName)}${a.groupColumnName?` · per ${esc(a.groupColumnName)}`:''}${stale?`<button class="analysis-badge" style="color:#b06c00;background:#fff7e7" data-refresh-analysis="${i}" title="Ricalcola con i dati e i filtri attuali">DA AGGIORNARE · Ricalcola</button>`:''}</div><div class="analysis-meta">${esc(a.filter)} · ${a.snapshot.length} valori validi · ${new Date(a.createdAt||Date.now()).toLocaleString('it-IT')}</div></div><button class="quiet small" data-remove-analysis="${i}">Rimuovi</button></div><div class="analysis-card-body${group?' has-groups':''}"><div class="general-analysis"><div class="metrics">${metrics.map(([k,v])=>`<div class="metric"><div class="metric-label">${esc(k)}</div><div class="metric-value">${fmt(v)}</div></div>`).join('')}</div>${a.kind==='Descrittiva'?AnalysisPlots.controlsHtml(a,i):''}<div class="analysis-plots" aria-live="polite">${a.kind==='Descrittiva'?AnalysisPlots.chartsHtml(a):''}</div></div>${group}</div><div class="analysis-footer"><span>${a.kind==='I-MR'?'Carta I-MR sperimentale · MR su righe consecutive':'Deviazione standard campionaria (n−1)'} · riga di origine conservata</span><button data-report="${i}">Esporta report</button></div></article>`}
+function analysisHtml(a,i,s){let stale=a.revision!==s.revision,metrics=Object.entries(a.metrics),visible=['N validi','N mancanti','Media','Mediana','Deviazione standard campionaria','Varianza campionaria','Errore standard della media','Minimo','Massimo','Ampiezza','Somma','MR medio','Sigma entro (MR / 1,128)','LCL I','CL I','UCL I','LCL MR','CL MR','UCL MR','Punti I oltre i limiti'];metrics=metrics.filter(([k])=>visible.includes(k));let group=a.groups?.length?`<div class="group-results"><p class="group-heading">Statistiche per categoria · ${esc(a.groupColumnName)}</p><div class="group-table"><table><thead><tr><th>Categoria</th>${['N validi','N mancanti','Media','Mediana','Deviazione standard campionaria','Varianza campionaria','Errore standard della media','Minimo','Massimo','Ampiezza','Somma'].map(k=>`<th>${esc(k)}</th>`).join('')}</tr></thead><tbody>${a.groups.map(g=>`<tr><td>${esc(g.category)}</td>${['N validi','N mancanti','Media','Mediana','Deviazione standard campionaria','Varianza campionaria','Errore standard della media','Minimo','Massimo','Ampiezza','Somma'].map(k=>`<td>${fmt(g.metrics[k])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>${a.kind==='Descrittiva'?`<div class="group-plot-controls-host">${AnalysisPlots.groupControlsHtml(a,i)}</div><div class="group-analysis-plots" aria-live="polite">${AnalysisPlots.groupChartsHtml(a)}</div>`:''}</div>`:'';return`<article class="analysis-card analysis-result-window" data-analysis-id="${esc(a.id)}" data-sheet-id="${esc(s.id)}" data-analysis-index="${i}" data-window-mode="normal" aria-label="${esc(AnalysisWindows.title(a))}"><div class="analysis-card-head"><div class="analysis-result-window-heading"><input class="analysis-result-title" type="text" maxlength="120" data-analysis-title="${i}" value="${esc(AnalysisWindows.title(a))}" aria-label="Nome della finestra ${esc(a.columnName)}" title="Scrivi il nome · Invio per confermare · Esc per annullare" autocomplete="off"><div class="analysis-name"><span class="analysis-badge">${a.kind==='I-MR'?'SPC':'DESCRITTIVA'}</span>${esc(a.columnName)}${a.groupColumnName?` · per ${esc(a.groupColumnName)}`:''}${stale?`<button class="analysis-badge" style="color:#b06c00;background:#fff7e7" data-refresh-analysis="${i}" title="Ricalcola con i dati e i filtri attuali">DA AGGIORNARE · Ricalcola</button>`:''}</div><div class="analysis-meta">${esc(a.filter)} · ${a.snapshot.length} valori validi · ${new Date(a.createdAt||Date.now()).toLocaleString('it-IT')}</div></div><div class="analysis-result-window-controls"><button data-analysis-window-action="minimize" data-analysis-index="${i}" title="Riduci questa analisi" aria-label="Riduci questa analisi" aria-expanded="true">—</button><button data-analysis-window-action="maximize" data-analysis-index="${i}" title="Ingrandisci questa analisi" aria-label="Ingrandisci questa analisi" aria-pressed="false">□</button><button class="quiet small" data-remove-analysis="${i}">Rimuovi</button></div></div><div class="analysis-result-content"><div class="analysis-card-body${group?' has-groups':''}"><div class="general-analysis"><div class="metrics">${metrics.map(([k,v])=>`<div class="metric"><div class="metric-label">${esc(k)}</div><div class="metric-value">${fmt(v)}</div></div>`).join('')}</div>${a.kind==='Descrittiva'?AnalysisPlots.controlsHtml(a,i):''}<div class="analysis-plots" aria-live="polite">${a.kind==='Descrittiva'?AnalysisPlots.chartsHtml(a):''}</div></div>${group}</div><div class="analysis-footer"><span>${a.kind==='I-MR'?'Carta I-MR sperimentale · MR su righe consecutive':'Deviazione standard campionaria (n−1)'} · riga di origine conservata</span><button data-report="${i}">Esporta report</button></div></div></article>`}
 function chartSvg(a){let obs=a.snapshot||[];if(!obs.length)return'';let vals=obs.map(o=>o.value),min=Math.min(...vals),max=Math.max(...vals),pad=(max-min||1)*.18,ymin=min-pad,ymax=max+pad,w=460,h=190,L=42,R=12,T=13,B=28;let x=i=>L+i*Math.max(1,(w-L-R)/(obs.length-1||1)),y=v=>T+(ymax-v)/(ymax-ymin)*(h-T-B);let points=obs.map((o,i)=>`${x(i)},${y(o.value)}`).join(' ');let lines=a.kind==='I-MR'?['LCL I','CL I','UCL I'].map((k,i)=>{let val=a.metrics[k],col=i===1?'#25a374':'#db6f6f';return`<line x1="${L}" x2="${w-R}" y1="${y(val)}" y2="${y(val)}" stroke="${col}" stroke-dasharray="4 4"/><text x="${w-R-2}" y="${y(val)-3}" text-anchor="end" font-size="8" fill="${col}">${k} ${esc(fmt(val))}</text>`}).join(''):'';return`<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Grafico valori analizzati"><line x1="${L}" x2="${L}" y1="${T}" y2="${h-B}" stroke="#dbe2e9"/><line x1="${L}" x2="${w-R}" y1="${h-B}" y2="${h-B}" stroke="#dbe2e9"/><text x="6" y="${T+7}" font-size="8" fill="#91a0b0">${esc(fmt(ymax))}</text><text x="6" y="${h-B}" font-size="8" fill="#91a0b0">${esc(fmt(ymin))}</text>${lines}<polyline points="${points}" fill="none" stroke="#4b8ee8" stroke-width="1.2" opacity=".5"/>${obs.map((o,i)=>`<circle cx="${x(i)}" cy="${y(o.value)}" r="3" fill="#1769e0"><title>Riga ${o.row}: ${fmt(o.value)}</title></circle>`).join('')}<text x="${w/2}" y="${h-5}" text-anchor="middle" font-size="8" fill="#8793a2">Riga originale</text><text x="${L+5}" y="12" font-size="8" fill="#8793a2">${esc(a.columnName)}</text></svg>`}
 function touch(s=sheet()){s.revision++;dirty=true;$('#dirty').textContent='Modifiche non esportate';$('#dirty').className='saved unsaved';localStorage.setItem('statistica-web-autosave',JSON.stringify(project));render()}
 function modal(title,body,buttons=[['Annulla','cancel','quiet'],['Conferma','ok','primary']]){return new Promise(resolve=>{let d=$('#modal');$('#modal-content').innerHTML=`<div class="modal-box"><h3>${title}</h3>${body}<div class="modal-buttons">${buttons.map(([t,v,c])=>`<button class="${c}" value="${v}">${t}</button>`).join('')}</div></div>`;d.showModal();d.addEventListener('close',function f(){d.removeEventListener('close',f);resolve(d.returnValue)},{once:true})})}
@@ -128,6 +129,7 @@ function projectFileName(name){
 }
 async function saveProject(){
  commitAnalysisWindowTitle();
+ AnalysisWindows.commitTitle();
  if(projectExportPending)return;
  projectExportPending=true;
  const original=project,originalJson=JSON.stringify(project),data=clone(project);
@@ -173,7 +175,7 @@ async function runAnalysis(kind){
  computeAdd(s,kind,col,-1);
 }
 function analysisResultKey(a){
- const {id,createdAt,revision,plotOptions,...result}=a;
+ const {id,createdAt,revision,plotOptions,windowOptions,...result}=a;
  return JSON.stringify(result,function(key,value){return value&&typeof value==='object'&&!Array.isArray(value)?Object.fromEntries(Object.entries(value).sort(([a],[b])=>a.localeCompare(b))):value});
 }
 function deduplicateSavedAnalyses(){
@@ -199,6 +201,7 @@ function refreshAnalysis(index){
   const updated=calc(s,a.kind,col,group);
   updated.id=a.id;
   if(a.plotOptions)updated.plotOptions={...a.plotOptions};
+  if(a.windowOptions)updated.windowOptions={...a.windowOptions};
   s.analyses[index]=updated;
   s.selectedAnalysis=index;
   dirty=true;
@@ -213,6 +216,7 @@ function computeAdd(s,kind,col,group){
   if(existing){
    result.id=existing.id;
    if(existing.plotOptions)result.plotOptions={...existing.plotOptions};
+   if(existing.windowOptions)result.windowOptions={...existing.windowOptions};
    result.createdAt=existing.createdAt;
    s.analyses=s.analyses.filter(a=>a===existing||analysisResultKey(a)!==key);
    s.selectedAnalysis=s.analyses.indexOf(existing);
@@ -224,6 +228,7 @@ function computeAdd(s,kind,col,group){
   dirty=true;
   localStorage.setItem('statistica-web-autosave',JSON.stringify(project));
   render();
+  AnalysisWindows.reveal(result.id);
  }catch(e){alert(e.message)}
 }
 function renderFilterEditor(prefix,s,col){
@@ -391,8 +396,19 @@ const workspaceWindows={
  table:{selector:'.data-card',header:'.card-toolbar',label:'tabella'},
  analysis:{selector:'.analysis-section',header:'.analysis-head',label:'analisi'}
 };
+function syncWindowBackdrop(){
+ let maximized=false;
+ for(const [key,settings] of Object.entries(workspaceWindows)){
+  const active=$(settings.selector).dataset.windowMode==='maximized';
+  document.body.classList.toggle(key+'-maximized',active);maximized||=active;
+ }
+ const resultMaximized=AnalysisWindows.hasMaximized();
+ document.body.classList.toggle('analysis-card-maximized',resultMaximized);
+ $('#table-window-backdrop').hidden=!(maximized||resultMaximized);
+}
 function setWorkspaceWindowMode(name,mode){
  const config=workspaceWindows[name];if(!config||!['normal','minimized','maximized'].includes(mode))return;
+ if(mode==='maximized'||name==='analysis'&&mode==='minimized')AnalysisWindows.exitMaximized(false);
  const card=$(config.selector),previous=card.dataset.windowMode||'normal';
  // A single maximized window owns the shared backdrop and page scroll lock.
  if(mode==='maximized')for(const [other,settings] of Object.entries(workspaceWindows)){
@@ -409,12 +425,7 @@ function setWorkspaceWindowMode(name,mode){
  maximize.title=mode==='maximized'?'Ripristina dimensioni':'Ingrandisci '+config.label;
  maximize.setAttribute('aria-label',maximize.title);
  maximize.setAttribute('aria-pressed',String(mode==='maximized'));
- let maximized=false;
- for(const [key,settings] of Object.entries(workspaceWindows)){
-  const active=$(settings.selector).dataset.windowMode==='maximized';
-  document.body.classList.toggle(key+'-maximized',active);maximized||=active;
- }
- $('#table-window-backdrop').hidden=!maximized;
+ syncWindowBackdrop();
 }
 function setTableWindowMode(mode){setWorkspaceWindowMode('table',mode)}
 function setAnalysisWindowMode(mode){setWorkspaceWindowMode('analysis',mode)}
@@ -539,5 +550,10 @@ $('#csv-file').onchange=async e=>{let f=e.target.files[0];e.target.value='';if(!
 $('#save-project').onclick=saveProject;$('#project-file').onchange=async e=>{let f=e.target.files[0];e.target.value='';if(f)try{await openProjectFile(f)}catch(err){alert(err.message)}};$('#open-project').onclick=()=>$('#project-file').click();$('#new-project').onclick=async()=>{if(dirty&&await modal('Nuovo progetto','<p>Le modifiche correnti non esportate verranno sostituite. Vuoi continuare?</p>')!=='ok')return;project={formatVersion:2,applicationVersion:'web-0.1',activeSheetId:'',joins:[],sheets:[]};let s=newSheet('Foglio 1',['C1','C2','C3'],[['','','']]);project.sheets=[s];project.activeSheetId=s.id;dirty=true;render()};
 $('#join-settings').onclick=async()=>{let opts=project.sheets.map(s=>`<option value="${s.id}">${esc(s.name)}</option>`).join('');let body=`<p>Le definizioni di join vengono conservate nel progetto. Questa versione web le salva, ma non esegue ancora la join.</p><div class="join-row"><div><label>Foglio sinistro</label><select id="jl">${opts}</select></div><div><label>Foglio destro</label><select id="jr">${opts}</select></div><div><label>Tipo</label><select id="jt"><option>Left</option><option>Inner</option><option>Full</option></select></div></div><div id="join-keys"></div><ul class="join-list">${project.joins.map(j=>`<li>${esc(j.name)} · ${j.type}</li>`).join('')||'<li>Nessun collegamento salvato.</li>'}</ul>`;let ans=await modal('Collegamenti tra fogli',body,[['Chiudi','cancel','quiet'],['Aggiungi definizione','ok','primary']]);if(ans!=='ok')return;let l=project.sheets.find(s=>s.id===$('#jl').value),r=project.sheets.find(s=>s.id===$('#jr').value);if(l===r)return alert('Seleziona due fogli diversi.');let ln=l.columns[0],rn=r.columns[0];project.joins.push({id:uid(),name:`${l.name}.${ln.name} = ${r.name}.${rn.name}`,leftSheetId:l.id,rightSheetId:r.id,type:$('#jt').value,keys:[{leftColumnId:ln.id,rightColumnId:rn.id}]});touch()};
 document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();saveProject()}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='o'){e.preventDefault();$('#project-file').click()}});
+AnalysisWindows.init({
+ getProject:()=>project,getSheet:()=>sheet(),
+ saveMetadata:()=>{dirty=true;$('#dirty').textContent='Modifiche non esportate';$('#dirty').className='saved unsaved';localStorage.setItem('statistica-web-autosave',JSON.stringify(project))},
+ setWorkspaceMode:setWorkspaceWindowMode,syncBackdrop:syncWindowBackdrop
+});
 try{let saved=localStorage.getItem('statistica-web-autosave');if(saved){project=validateProject(JSON.parse(saved));dirty=false;render()}else init()}catch(e){init()}
 

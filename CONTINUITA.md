@@ -21,6 +21,8 @@ L'agente deve leggere le istruzioni, verificare lo stato locale e remoto e prose
 
 ## Funzioni attualmente realizzate
 
+- Finestre indipendenti per ogni risultato del foglio attivo: titolo diretto in `windowOptions.title`, resize/min/max, contenuto scorrevole e Affianca finestre. Nuovo modulo offline `analysis-windows.js` con stato geometria/modalità per sessione separato dai dati. `windowOptions` escluso dall’identità statistica e conservato in refresh/dedup/export/import. Calcoli identici riaprono la finestra già presente. Restano il titolo e i controlli globali dell’area Analisi. Una sola vista massimizzata tra tabella, area o singolo risultato, con pulizia del backdrop a rimozione/cambio foglio. Test `tests/browser-multiple-analyses.py`.
+
 - Titolo della finestra Analisi modificabile direttamente tramite `analysis-window-name`: clic seleziona il testo, Invio/blur confermano, Esc annulla; vuoto ripristina Analisi. Metadato di progetto `analysisWindowTitle`, default retrocompatibile, persistenza/autosave/export/import senza incrementare revisioni statistiche. Ctrl+S conferma il titolo prima di esportare. Il doppio clic sul nome modifica/seleziona testo; per ingrandire usare la barra fuori dal campo. Test `tests/browser-analysis-title.py`.
 
 - Finestra dell’intera area Analisi: ridimensionamento manuale, riduzione alla barra, ingrandimento/ripristino e doppio clic sul titolo, con contenuto a scorrimento. Controlli `analysis-minimize`/`analysis-maximize`; controller condiviso con la tabella, una sola finestra massimizzata e backdrop/blocco dello scorrimento coerenti. Il DOM dei risultati e le dimensioni manuali restano intatti nei cambi di modalità. Test dedicato `tests/browser-analysis-window.py`.

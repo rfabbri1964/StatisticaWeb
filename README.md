@@ -93,3 +93,11 @@ L’intera area **Analisi** si ridimensiona dall’angolo inferiore destro, come
 Le finestre Tabella dati e Analisi hanno controlli indipendenti; una sola alla volta occupa lo schermo. Ripristinare una finestra mantiene le dimensioni impostate col mouse nella sessione. Verifica browser dedicata: `python3 tests/browser-analysis-window.py` con server locale attivo.
 
 Il nome della finestra Analisi si modifica direttamente nel titolo: cliccare, sovrascrivere e premere Invio o cliccare altrove. Esc annulla la modifica; un nome vuoto ripristina Analisi. Il nome appartiene al progetto, resta uguale tra i fogli e viene conservato nel browser e nei progetti esportati. Ctrl+S include anche il titolo appena digitato. La modifica del nome non rende obsolete le analisi.
+
+## Più finestre di analisi
+
+Ogni risultato del foglio corrente è una finestra indipendente nell’area Analisi, con nome modificabile, ridimensionamento dall’angolo, riduzione e ingrandimento. Calcolare una nuova analisi la apre senza sostituire quelle già presenti. **Affianca finestre** ripristina e dispone i risultati uno accanto all’altro quando la larghezza disponibile lo consente. Ogni finestra mantiene i propri grafici, selezione dei cluster e livelli di confidenza.
+
+Il titolo di ciascun risultato si modifica direttamente con Invio/clic fuori per confermare ed Esc per annullare, ed è salvato nel progetto. Ricalcolare un’analisi identica riapre la finestra esistente, senza creare duplicati. Le dimensioni e la modalità di ciascuna finestra vengono mantenute durante i ricalcoli e i cambi di foglio nella sessione. **Rimuovi** elimina il risultato; ridurre una finestra conserva i dati e le impostazioni. Si può ingrandire una finestra alla volta, con ripristino delle dimensioni precedenti.
+
+Verifica dedicata: `python3 tests/browser-multiple-analyses.py` con server locale attivo.
