@@ -1,0 +1,15 @@
+{
+  "commit": "bb257473b3a77653bc1b526c4aaec4bda915658c",
+  "source_blobs": {
+    "index.html": "8ef6308e27786a2d15d2afb80286df3e299f8b42",
+    "style.css": "67a3537dd7c00c14a89f60576674c794e308d245",
+    "app.js": "a177e8e227c4a80acc91ceb2316981e91b896fc0",
+    "analysis-plots.js": "ed22f36256e652a44dfe16dc9e67da4c7da7d5d1",
+    "analysis-windows.js": "2d63195c216333eb8ba4d1104642f714e292ae32",
+    "vendor/jstat.min.js": "9d099ab144c9684f5ecc8a04688076555185b13c",
+    "vendor/jstat-LICENSE": "3ec8e0d6de6d413d22e213c00434a63df0d56db0"
+  },
+  "artifact": "StatisticaWeb-bb25747.html",
+  "bytes": 211922,
+  "sha256": "c40e82af1046922283c8260d7bf36b56051567baa618a55d8368a48d9aaafa29"
+}

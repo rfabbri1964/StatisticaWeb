@@ -1,0 +1,20 @@
+STATISTICAWEB — FILE HTML AUTONOMO
+
+File da salvare: StatisticaWeb-bb25747.html (circa 212 KB).
+Versione congelata il 25 ottobre 2026, commit bb257473b3a77653bc1b526c4aaec4bda915658c.
+Confezionata il 27 ottobre 2026: CSS, codice e jStat 1.9.6 sono incorporati nello stesso file. La licenza MIT di jStat è inclusa.
+
+USO
+Salva il file HTML sul computer e aprilo con un browser desktop moderno, per esempio Chrome o Edge. Non occorrono ChatGPT, un server o un'installazione.
+Se il collegamento mostra il codice HTML, usa Ctrl+S e conserva l'estensione .html del nome.
+
+DATI
+Il file contiene il software e i dati dimostrativi, non i progetti già inseriti nel sito. Per trasferirli, nel sito usa Esporta progetto; nel file HTML usa Apri progetto e seleziona il .statweb.json.
+Continua a esportare i progetti: il salvataggio automatico del browser è separato da quello del sito e può dipendere dal percorso/nome del file HTML.
+Questa copia non si aggiorna automaticamente insieme al sito.
+
+VERIFICA
+Prove browser sul documento HTML in contesto offline: nessuna richiesta HTTP esterna né errore JavaScript; CSV, filtri, grafici generali/per cluster, livelli IC, finestre e navigazione, export/import JSON, ricaricamento e importazione dei dati legacy verificati.
+Limite del collaudo: il browser gestito dell'ambiente impedisce file:// e la finestra nativa di salvataggio. Il documento è stato quindi verificato mediante caricamento locale intercettato, senza server o rete. Apertura con doppio clic e dialogo nativo da file non verificati qui.
+
+Il sito main e il branch congelato non vengono modificati da questa distribuzione.
